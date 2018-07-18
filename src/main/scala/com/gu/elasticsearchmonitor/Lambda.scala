@@ -1,6 +1,11 @@
 package com.gu.elasticsearchmonitor
 
+import com.amazonaws.auth.profile.ProfileCredentialsProvider
+import com.amazonaws.auth.{ AWSCredentialsProviderChain, DefaultAWSCredentialsProviderChain }
+import com.amazonaws.services.cloudwatch.{ AmazonCloudWatch, AmazonCloudWatchClient }
 import com.amazonaws.services.lambda.runtime.Context
+import com.fasterxml.jackson.databind.ObjectMapper
+import okhttp3.OkHttpClient
 import org.slf4j.{ Logger, LoggerFactory }
 
 class LambdaInput()
@@ -26,8 +31,32 @@ object Lambda {
     logger.info(process(env))
   }
 
+  val host = "http://localhost:8000"
+
+  val httpClient = new OkHttpClient()
+
+  val mapper = new ObjectMapper()
+
+  val credentials = new AWSCredentialsProviderChain(
+    new ProfileCredentialsProvider("deployTools"),
+    DefaultAWSCredentialsProviderChain.getInstance)
+
+  val cloudwatch: AmazonCloudWatch = AmazonCloudWatchClient.builder()
+    .withCredentials(credentials)
+    .withRegion("eu-west-1")
+    .build
+
+  val cloudwatchMetrics = new CloudwatchMetrics(Env(), cloudwatch)
+
   def process(env: Env): String = {
-    ""
+    val result = for {
+      clusterHealth <- ClusterHealth.fetchAndParse(host, httpClient, mapper)
+      nodeStats <- NodeStats.fetchAndParse(host, httpClient, mapper)
+    } yield {
+      cloudwatchMetrics.sendClusterStatus(clusterHealth, nodeStats)
+    }
+
+    result.toString
   }
 }
 
