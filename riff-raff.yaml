@@ -1,0 +1,19 @@
+stacks: [deploy]
+regions: [eu-west-1]
+
+deployments:
+  elastic-search-monitor:
+    type: aws-lambda
+    parameters:
+      bucket: deploy-dist
+      functionNames: [elastic-search-monitor-]
+      fileName: elastic-search-monitor.jar
+      prefixStack: false
+    dependencies: [elastic-search-monitor-cfn]
+  elastic-search-monitor-cfn:
+    type: cloud-formation
+    app: elastic-search-monitor
+    parameters:
+      prependStackToCloudFormationStackName: false
+      cloudFormationStackName: elastic-search-monitor
+      templatePath: cfn.yaml
