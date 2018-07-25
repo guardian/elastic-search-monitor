@@ -20,7 +20,19 @@ Parameters:
     Description: Bucket where RiffRaff uploads artifacts on deploy
     Type: String
     Default: deploy-dist
+  VpcId:
+    Description: Vpc id (same VPC as your ELK stack)
+    Type: AWS::EC2::VPC::Id
+  Subnets:
+    Description: Subnets (within your VPC)
+    Type: List<AWS::EC2::Subnet::Id>
 Resources:
+  LambdaSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Open access to elk cluster
+      VpcId:
+        Ref: VpcId
   ExecutionRole:
     Type: AWS::IAM::Role
     Properties:
@@ -68,12 +80,15 @@ Resources:
       Role: !GetAtt ExecutionRole.Arn
       Runtime: java8
       Timeout: 60
+      VpcConfig:
+        SubnetIds: !Ref Subnets
+        SecurityGroupIds: [!GetAtt LambdaSecurityGroup.GroupId]
 
   DailyEvent:
     Type: AWS::Events::Rule
     Properties:
       Description: Event sent to process the previous day of data
-      ScheduleExpression: cron(14 3 * * ? *)
+      ScheduleExpression: rate(1 minute)
       Targets:
         - Id: Lambda
           Arn: !GetAtt Lambda.Arn
