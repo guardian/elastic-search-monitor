@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.OkHttpClient
 import org.slf4j.{ Logger, LoggerFactory }
 
+import scala.util.{ Failure, Success, Try }
+
 class LambdaInput()
 
 case class Env(app: String, stack: String, stage: String) {
@@ -31,7 +33,10 @@ object Lambda {
   def handler(lambdaInput: LambdaInput, context: Context): Unit = {
     val env = Env()
     logger.info(s"Starting $env")
-    logger.info(process(env))
+    Try(process(env)) match {
+      case Success(result) => logger.info(s"Successfully finished to send metrics to cloudwatch: $result")
+      case Failure(e) => logger.error("Unable to finish processing the metrics", e)
+    }
   }
 
   val host = "http://localhost:8000"
