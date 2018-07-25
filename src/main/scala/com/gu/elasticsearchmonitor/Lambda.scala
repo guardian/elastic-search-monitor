@@ -25,6 +25,9 @@ object Lambda {
 
   val logger: Logger = LoggerFactory.getLogger(this.getClass)
 
+  /*
+    Lambda entry point, it is referenced in the cloudformation
+   */
   def handler(lambdaInput: LambdaInput, context: Context): Unit = {
     val env = Env()
     logger.info(s"Starting $env")
