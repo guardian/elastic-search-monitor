@@ -25,6 +25,7 @@ object NodeStats {
     val result = nodeStatsResponse match {
       case Success(response) if response.code == 200 =>
         val root = mapper.readTree(response.body.string)
+        logger.info("Fetched the node stats")
         Right(NodeStats(
           nodes = root.get("nodes").iterator().asScala.toList.map(Node.parse)))
       case Success(response) =>

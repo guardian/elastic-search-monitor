@@ -3,11 +3,14 @@ package com.gu.elasticsearchmonitor
 import java.util.Date
 
 import com.amazonaws.services.cloudwatch.AmazonCloudWatch
-import com.amazonaws.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest, StandardUnit}
+import com.amazonaws.services.cloudwatch.model.{ Dimension, MetricDatum, PutMetricDataRequest, StandardUnit }
+import org.slf4j.{ Logger, LoggerFactory }
 
 import collection.JavaConverters._
 
 class CloudwatchMetrics(env: Env, cloudWatch: AmazonCloudWatch) {
+
+  val logger: Logger = LoggerFactory.getLogger(this.getClass)
 
   def metricDatum(metricName: String, value: Double, unit: StandardUnit, dimensions: List[(String, String)], now: Date): MetricDatum = {
     val metricDatum = new MetricDatum
@@ -54,10 +57,12 @@ class CloudwatchMetrics(env: Env, cloudWatch: AmazonCloudWatch) {
 
   def sendClusterStatus(clusterHealth: ClusterHealth, nodeStats: NodeStats): Unit = {
 
-    val metricBatches = buildMetricData(clusterHealth, nodeStats).grouped(20) // hard limit of 20 items on cloudwatch's side
+    val allMetrics = buildMetricData(clusterHealth, nodeStats)
+    logger.info(s"Found ${allMetrics.size} metrics")
+    val metricBatches = allMetrics.grouped(20) // hard limit of 20 items on cloudwatch's side
 
     metricBatches.foreach { batch =>
-
+      logger.info(s"Sending a batch of ${batch.size} metrics to cloudwatch")
       val putMetricDataRequest = new PutMetricDataRequest()
       putMetricDataRequest.setNamespace(s"${env.stack}/${clusterHealth.clusterName}")
       putMetricDataRequest.setMetricData(batch.asJava)

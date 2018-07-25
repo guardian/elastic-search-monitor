@@ -33,10 +33,7 @@ object Lambda {
   def handler(lambdaInput: LambdaInput, context: Context): Unit = {
     val env = Env()
     logger.info(s"Starting $env")
-    Try(process(env)) match {
-      case Success(result) => logger.info(s"Successfully finished to send metrics to cloudwatch: $result")
-      case Failure(e) => logger.error("Unable to finish processing the metrics", e)
-    }
+    process(env)
   }
 
   val host = "http://localhost:8000"
@@ -56,15 +53,18 @@ object Lambda {
 
   val cloudwatchMetrics = new CloudwatchMetrics(Env(), cloudwatch)
 
-  def process(env: Env): String = {
-    val result = for {
+  def process(env: Env): Unit = {
+    def fetchAndSendMetrics = for {
       clusterHealth <- ClusterHealth.fetchAndParse(host, httpClient, mapper)
       nodeStats <- NodeStats.fetchAndParse(host, httpClient, mapper)
     } yield {
       cloudwatchMetrics.sendClusterStatus(clusterHealth, nodeStats)
     }
 
-    result.toString
+    Try(fetchAndSendMetrics) match {
+      case Success(_) => logger.info(s"Successfully finished to send metrics to cloudwatch")
+      case Failure(e) => logger.error("Unable to finish processing the metrics", e)
+    }
   }
 }
 

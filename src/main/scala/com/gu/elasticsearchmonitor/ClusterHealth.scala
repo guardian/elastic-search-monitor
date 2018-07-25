@@ -27,6 +27,7 @@ object ClusterHealth {
     val result = clusterHealthResponse match {
       case Success(response) if response.code == 200 =>
         val root = mapper.readTree(response.body.string)
+        logger.info("Fetched the cluster health")
         Right(ClusterHealth(
           clusterName = root.get("cluster_name").asText,
           status = root.get("status").asText,
