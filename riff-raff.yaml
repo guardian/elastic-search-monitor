@@ -5,7 +5,7 @@ deployments:
   elastic-search-monitor:
     type: aws-lambda
     parameters:
-      bucket: deploy-dist
+      bucket: deploy-tools-dist
       functionNames: [elastic-search-monitor-]
       fileName: elastic-search-monitor.jar
       prefixStack: false

@@ -19,7 +19,7 @@ Parameters:
   DeployBucket:
     Description: Bucket where RiffRaff uploads artifacts on deploy
     Type: String
-    Default: deploy-dist
+    Default: deploy-tools-dist
   VpcId:
     Description: Vpc id (same VPC as your ELK stack)
     Type: AWS::EC2::VPC::Id
