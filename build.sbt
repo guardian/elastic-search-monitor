@@ -17,7 +17,12 @@ scalacOptions ++= Seq(
 
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.0",
-  "org.slf4j" % "slf4j-simple" % "1.7.25"
+  "org.slf4j" % "slf4j-simple" % "1.7.25",
+  "com.squareup.okhttp3" % "okhttp" % "3.11.0",
+  "com.amazonaws" % "aws-java-sdk-cloudwatch" % "1.11.369",
+  "com.fasterxml.jackson.core" % "jackson-core" % "2.6.7",
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.6.7.1",
+  "com.fasterxml.jackson.core" % "jackson-annotations" % "2.6.7"
 )
 
 enablePlugins(RiffRaffArtifact)
