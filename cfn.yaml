@@ -84,7 +84,14 @@ Resources:
             Statement:
               Effect: Allow
               Action:
-                - ec2:describeInstances
+                - ec2:DescribeInstances
+              Resource: "*"
+        - PolicyName: cloudwatch
+          PolicyDocument:
+            Statement:
+              Effect: Allow
+              Action:
+                - cloudwatch:PutMetricData
               Resource: "*"
   Lambda:
     Type: AWS::Lambda::Function
