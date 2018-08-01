@@ -104,7 +104,7 @@ Resources:
           ClusterName: !Ref ClusterName
       Description: Monitors your elastic search cluster and reports metrics to cloudwatch
       Handler: com.gu.elasticsearchmonitor.Lambda::handler
-      MemorySize: 128
+      MemorySize: 256
       Role: !GetAtt ExecutionRole.Arn
       Runtime: java8
       Timeout: 60
