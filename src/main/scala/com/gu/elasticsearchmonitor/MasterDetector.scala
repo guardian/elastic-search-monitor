@@ -44,7 +44,7 @@ class MasterDetector(amazonEC2: AmazonEC2, httpClient: OkHttpClient) {
 
     Try(queryInstances(Nil, None)) match {
       case Success(instances) =>
-        val instanceNames = instances.map(instance => s"http://${instance.getPrivateDnsName}:9002")
+        val instanceNames = instances.map(instance => s"http://${instance.getPrivateIpAddress}:9002")
         logger.info(s"Identified these instances as potential candidates: $instanceNames")
         val statuses = instanceNames.map(pingInstance)
 
