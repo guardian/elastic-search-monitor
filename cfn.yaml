@@ -35,13 +35,10 @@ Parameters:
   Subnets:
     Description: Subnets (within your VPC)
     Type: List<AWS::EC2::Subnet::Id>
+  ClusterSecurityGroup:
+    Description: A security group allowing the lambda to connect to port 9200 over TCP
+    Type: AWS::EC2::SecurityGroup::Id
 Resources:
-  LambdaSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Open access to elk cluster
-      VpcId:
-        Ref: VpcId
   ExecutionRole:
     Type: AWS::IAM::Role
     Properties:
@@ -114,16 +111,16 @@ Resources:
       MemorySize: 256
       Role: !GetAtt ExecutionRole.Arn
       Runtime: java8
-      Timeout: 60
+      Timeout: 180
       VpcConfig:
         SubnetIds: !Ref Subnets
-        SecurityGroupIds: [!GetAtt LambdaSecurityGroup.GroupId]
+        SecurityGroupIds: [ !Ref ClusterSecurityGroup ]
 
   DailyEvent:
     Type: AWS::Events::Rule
     Properties:
       Description: Event sent to process the previous day of data
-      ScheduleExpression: rate(1 minute)
+      ScheduleExpression: rate(3 minutes)
       Targets:
         - Id: Lambda
           Arn: !GetAtt Lambda.Arn
