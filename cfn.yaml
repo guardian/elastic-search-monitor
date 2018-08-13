@@ -111,7 +111,7 @@ Resources:
       MemorySize: 256
       Role: !GetAtt ExecutionRole.Arn
       Runtime: java8
-      Timeout: 180
+      Timeout: 60
       VpcConfig:
         SubnetIds: !Ref Subnets
         SecurityGroupIds: [ !Ref ClusterSecurityGroup ]
@@ -120,7 +120,7 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       Description: Event sent to process the previous day of data
-      ScheduleExpression: rate(3 minutes)
+      ScheduleExpression: rate(1 minute)
       Targets:
         - Id: Lambda
           Arn: !GetAtt Lambda.Arn
