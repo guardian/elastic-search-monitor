@@ -30,25 +30,26 @@ class MasterDetector(amazonEC2: AmazonEC2, httpClient: OkHttpClient) {
       }
     }
 
-    def pingInstance(instanceName: String): Boolean = {
+    def masterRespondsToHealthCheck(instanceName: String): Boolean = {
       val clusterHealthRequest = new Request.Builder()
         .url(s"$instanceName/_cluster/health")
         .build()
 
       val clusterHealthResponse = Try(httpClient.newCall(clusterHealthRequest).execute())
-      clusterHealthResponse match {
+      val result = clusterHealthResponse match {
         case Success(response) if response.code == 200 => true
         case _ => false
       }
+      clusterHealthResponse.foreach(_.close)
+      result
     }
 
     Try(queryInstances(Nil, None)) match {
       case Success(instances) =>
         val instanceNames = instances.map(instance => s"http://${instance.getPrivateIpAddress}:9200")
         logger.info(s"Identified these instances as potential candidates: $instanceNames")
-        val statuses = instanceNames.map(pingInstance)
+        val aliveInstances = instanceNames.filter(masterRespondsToHealthCheck)
 
-        val aliveInstances = instanceNames.zip(statuses).filter(_._2).map(_._1)
         val masterInfo = MasterInformation(
           numberOfMasterInstances = instanceNames.size,
           numberOfRespondingMasters = aliveInstances.size,
