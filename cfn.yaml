@@ -16,6 +16,15 @@ Parameters:
       - CODE
       - PROD
     Default: CODE
+  TagQueryApp:
+    Description: Application name of the cluster master node
+    Type: String
+  TagQueryStack:
+    Description: Stack name of the cluster master node
+    Type: String
+  ClusterName:
+    Description: Cluster name to use in the cloudwatch metrics
+    Type: String
   DeployBucket:
     Description: Bucket where RiffRaff uploads artifacts on deploy
     Type: String
@@ -26,13 +35,10 @@ Parameters:
   Subnets:
     Description: Subnets (within your VPC)
     Type: List<AWS::EC2::Subnet::Id>
+  ClusterSecurityGroup:
+    Description: A security group allowing the lambda to connect to port 9200 over TCP
+    Type: AWS::EC2::SecurityGroup::Id
 Resources:
-  LambdaSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Open access to elk cluster
-      VpcId:
-        Ref: VpcId
   ExecutionRole:
     Type: AWS::IAM::Role
     Properties:
@@ -70,6 +76,20 @@ Resources:
                 - ec2:DescribeNetworkInterfaces
                 - ec2:DeleteNetworkInterface
               Resource: "*"
+        - PolicyName: ec2-detection
+          PolicyDocument:
+            Statement:
+              Effect: Allow
+              Action:
+                - ec2:DescribeInstances
+              Resource: "*"
+        - PolicyName: cloudwatch
+          PolicyDocument:
+            Statement:
+              Effect: Allow
+              Action:
+                - cloudwatch:PutMetricData
+              Resource: "*"
   Lambda:
     Type: AWS::Lambda::Function
     Properties:
@@ -83,15 +103,18 @@ Resources:
           Stage: !Ref Stage
           Stack: !Ref Stack
           App: !Ref App
+          TagQueryApp: !Ref TagQueryApp
+          TagQueryStack: !Ref TagQueryStack
+          ClusterName: !Ref ClusterName
       Description: Monitors your elastic search cluster and reports metrics to cloudwatch
       Handler: com.gu.elasticsearchmonitor.Lambda::handler
-      MemorySize: 128
+      MemorySize: 256
       Role: !GetAtt ExecutionRole.Arn
       Runtime: java8
       Timeout: 60
       VpcConfig:
         SubnetIds: !Ref Subnets
-        SecurityGroupIds: [!GetAtt LambdaSecurityGroup.GroupId]
+        SecurityGroupIds: [ !Ref ClusterSecurityGroup ]
 
   DailyEvent:
     Type: AWS::Events::Rule

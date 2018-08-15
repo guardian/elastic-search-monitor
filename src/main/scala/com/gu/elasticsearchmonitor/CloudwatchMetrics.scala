@@ -30,7 +30,7 @@ class CloudwatchMetrics(env: Env, cloudWatch: AmazonCloudWatch) {
     metricDatum
   }
 
-  def buildMetricData(clusterHealth: ClusterHealth, nodeStats: NodeStats): List[MetricDatum] = {
+  def buildMetricData(clusterName: String, clusterHealth: ClusterHealth, nodeStats: NodeStats): List[MetricDatum] = {
     val now = new Date() // consistent timestamp across metrics
 
     def elasticSearchStatusToDouble(status: String): Double = status match {
@@ -39,7 +39,7 @@ class CloudwatchMetrics(env: Env, cloudWatch: AmazonCloudWatch) {
       case "red" => 2d
       case _ => 3d
     }
-    val defaultDimensions = List("Cluster" -> clusterHealth.clusterName)
+    val defaultDimensions = List("Cluster" -> clusterName)
 
     val clusterMetrics = List(
       metricDatum("NumberOfNodes", clusterHealth.numberOfNodes.toDouble, StandardUnit.Count, defaultDimensions, now),
@@ -55,19 +55,27 @@ class CloudwatchMetrics(env: Env, cloudWatch: AmazonCloudWatch) {
     clusterMetrics ++ nodeMetrics
   }
 
-  def sendClusterStatus(clusterHealth: ClusterHealth, nodeStats: NodeStats): Unit = {
+  def buildMetricData(clusterName: String, masterInformation: MasterInformation): List[MetricDatum] = {
+    val now = new Date() // consistent timestamp across metrics
+    val defaultDimensions = List("Cluster" -> clusterName)
+    List(
+      metricDatum("NumberOfMasterNodes", masterInformation.numberOfMasterInstances, StandardUnit.Count, defaultDimensions, now),
+      metricDatum("NumberOfRespondingMastersNodes", masterInformation.numberOfRespondingMasters, StandardUnit.Count, defaultDimensions, now))
+  }
 
-    val allMetrics = buildMetricData(clusterHealth, nodeStats)
-    logger.info(s"Found ${allMetrics.size} metrics")
-    val metricBatches = allMetrics.grouped(20) // hard limit of 20 items on cloudwatch's side
+  def sendMetrics(clusterName: String, metrics: List[MetricDatum]): Unit = {
+
+    logger.info(s"About to send ${metrics.size} metrics")
+    val metricBatches = metrics.grouped(20) // hard limit of 20 items on cloudwatch's side
 
     metricBatches.foreach { batch =>
       logger.info(s"Sending a batch of ${batch.size} metrics to cloudwatch")
       val putMetricDataRequest = new PutMetricDataRequest()
-      putMetricDataRequest.setNamespace(s"${env.stack}/${clusterHealth.clusterName}")
+      putMetricDataRequest.setNamespace(s"${env.stack}/$clusterName")
       putMetricDataRequest.setMetricData(batch.asJava)
 
       cloudWatch.putMetricData(putMetricDataRequest)
     }
   }
+
 }
