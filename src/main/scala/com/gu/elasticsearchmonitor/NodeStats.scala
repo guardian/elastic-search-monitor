@@ -45,7 +45,8 @@ case class Node(
   name: String,
   dataFree: Long,
   dataTotal: Long,
-  jvmHeapUsedPercent: Int)
+  jvmHeapUsedPercent: Int,
+  isDataNode: Boolean)
 
 object Node {
   def parse(jsonNode: JsonNode): Node = {
@@ -53,6 +54,7 @@ object Node {
       name = jsonNode.get("name").asText,
       dataFree = jsonNode.get("fs").get("total").get("free_in_bytes").asLong,
       dataTotal = jsonNode.get("fs").get("total").get("total_in_bytes").asLong,
-      jvmHeapUsedPercent = jsonNode.get("jvm").get("mem").get("heap_used_percent").asInt)
+      jvmHeapUsedPercent = jsonNode.get("jvm").get("mem").get("heap_used_percent").asInt,
+      isDataNode = jsonNode.get("roles").elements().asScala.toList.map(_.asText).contains("data"))
   }
 }

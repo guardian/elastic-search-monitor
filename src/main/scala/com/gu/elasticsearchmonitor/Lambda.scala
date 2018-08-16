@@ -76,7 +76,7 @@ object Lambda {
     def fetchAndSendMetrics = for {
       masterInfo <- masterDetector.detectMasters(env)
     } yield {
-      val masterMetrics = cloudwatchMetrics.buildMetricData(env.clusterName, masterInfo)
+      val masterMetrics = cloudwatchMetrics.buildMasterMetricData(env.clusterName, masterInfo)
       val clusterMetrics = for {
         masterHostName <- resolveMasterHostName(masterInfo)
         clusterHealth <- ClusterHealth.fetchAndParse(masterHostName, httpClient, mapper)

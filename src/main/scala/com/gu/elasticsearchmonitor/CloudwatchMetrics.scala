@@ -52,10 +52,22 @@ class CloudwatchMetrics(env: Env, cloudWatch: AmazonCloudWatch) {
         metricDatum("TotalDiskSpace", node.dataTotal.toDouble, StandardUnit.Bytes, dimensions, now),
         metricDatum("JvmHeapUsage", node.jvmHeapUsedPercent.toDouble, StandardUnit.Percent, dimensions, now))
     }
-    clusterMetrics ++ nodeMetrics
+    val dataNodes = nodeStats.nodes.filter(_.isDataNode)
+    val aggregatedDataNodeMetrics = if (dataNodes.nonEmpty) {
+      val minFreeDiskSpace = dataNodes.minBy(_.dataFree).dataFree
+      val sumFreeDiskSpace = dataNodes.map(_.dataFree).sum
+      val sumTotalDiskSpace = dataNodes.map(_.dataTotal).sum
+      val maxJvmHeapUsage = dataNodes.maxBy(_.jvmHeapUsedPercent).jvmHeapUsedPercent
+      List(
+        metricDatum("MinFreeDiskSpace", minFreeDiskSpace.toDouble, StandardUnit.Bytes, defaultDimensions, now),
+        metricDatum("SumFreeDiskSpace", sumFreeDiskSpace.toDouble, StandardUnit.Bytes, defaultDimensions, now),
+        metricDatum("SumTotalDiskSpace", sumTotalDiskSpace.toDouble, StandardUnit.Bytes, defaultDimensions, now),
+        metricDatum("MaxJvmHeapUsage", maxJvmHeapUsage.toDouble, StandardUnit.Bytes, defaultDimensions, now))
+    } else Nil
+    clusterMetrics ++ nodeMetrics ++ aggregatedDataNodeMetrics
   }
 
-  def buildMetricData(clusterName: String, masterInformation: MasterInformation): List[MetricDatum] = {
+  def buildMasterMetricData(clusterName: String, masterInformation: MasterInformation): List[MetricDatum] = {
     val now = new Date() // consistent timestamp across metrics
     val defaultDimensions = List("Cluster" -> clusterName)
     List(
