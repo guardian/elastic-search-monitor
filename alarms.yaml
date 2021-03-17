@@ -48,7 +48,7 @@ Resources:
       Namespace: !Sub ${Stack}/${ClusterName}
       Period: 60
       Statistic: Minimum
-      Threshold: 6
+      Threshold: 3
 
   MasterNodeCountAlarm:
     Type: AWS::CloudWatch::Alarm
