@@ -22,15 +22,37 @@ object ClusterHealth {
       .url(s"$host/_cluster/health")
       .build()
 
+    val shardAllocationRequest = new Request.Builder()
+      .url(s"$host/_cluster/allocation/explain")
+      .build()
+
+    val nodeInfoRequest = new Request.Builder()
+      .url(s"$host/_nodes")
+      .build()
+
     val clusterHealthResponse = Try(httpClient.newCall(clusterHealthRequest).execute())
 
     val result = clusterHealthResponse match {
       case Success(response) if response.code == 200 =>
         val root = mapper.readTree(response.body.string)
         logger.info("Fetched the cluster health")
+        val clusterStatus = root.get("status").asText
+        if (clusterStatus != "green") {
+          val requestAttempts = for {
+            shardRequest <- Try(httpClient.newCall(shardAllocationRequest).execute())
+            nodeRequest <- Try(httpClient.newCall(nodeInfoRequest).execute())
+          } yield {
+            logger.warn(s"Cluster is in $clusterStatus. Shard allocation info:\n${shardRequest.body.string}\nNode info:\n${nodeRequest.body.string}")
+          }
+          if (requestAttempts.isFailure) {
+            logger.error(s"Failed to obtain debug information about cluster status due to ${requestAttempts.failed.get}")
+          }
+        }
+        // If status != green
+        // Call GET _cluster/allocation/explain and GET /_nodes(?) and log response
         Right(ClusterHealth(
           clusterName = root.get("cluster_name").asText,
-          status = root.get("status").asText,
+          status = clusterStatus,
           numberOfNodes = root.get("number_of_nodes").asInt,
           numberOfDataNodes = root.get("number_of_data_nodes").asInt))
 
