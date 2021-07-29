@@ -48,8 +48,6 @@ object ClusterHealth {
             logger.error(s"Failed to obtain debug information about cluster status due to ${requestAttempts.failed.get}")
           }
         }
-        // If status != green
-        // Call GET _cluster/allocation/explain and GET /_nodes(?) and log response
         Right(ClusterHealth(
           clusterName = root.get("cluster_name").asText,
           status = clusterStatus,
