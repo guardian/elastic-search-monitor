@@ -46,7 +46,7 @@ object ClusterHealth {
           }
           requestAttempts.recover {
             case exception =>
-              logger.error(s"Failed to obtain debug information about cluster status due to $exception")
+              logger.warn(s"Failed to obtain debug information about cluster status due to $exception")
           }
         }
         Right(ClusterHealth(
