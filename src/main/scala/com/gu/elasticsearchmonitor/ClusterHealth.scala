@@ -44,8 +44,9 @@ object ClusterHealth {
           } yield {
             logger.warn(s"Cluster is in $clusterStatus. Shard allocation info:\n${shardRequest.body.string}\nNode info:\n${nodeRequest.body.string}")
           }
-          if (requestAttempts.isFailure) {
-            logger.error(s"Failed to obtain debug information about cluster status due to ${requestAttempts.failed.get}")
+          requestAttempts.recover {
+            case exception =>
+              logger.error(s"Failed to obtain debug information about cluster status due to $exception")
           }
         }
         Right(ClusterHealth(
