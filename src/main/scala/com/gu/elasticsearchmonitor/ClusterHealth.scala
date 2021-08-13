@@ -42,7 +42,7 @@ object ClusterHealth {
             shardRequest <- Try(httpClient.newCall(shardAllocationRequest).execute())
             nodeRequest <- Try(httpClient.newCall(nodeInfoRequest).execute())
           } yield {
-            logger.warn(s"Cluster is in $clusterStatus. Shard allocation info:\n${shardRequest.body.string}\nNode info:\n${nodeRequest.body.string}")
+            logger.warn(s"Cluster is in $clusterStatus status. Shard allocation info: ${shardRequest.body.string} | Node info: ${nodeRequest.body.string}")
           }
           requestAttempts.recover {
             case exception =>
