@@ -77,12 +77,31 @@ Resources:
       Dimensions:
       - Name: Cluster
         Value: !Ref ClusterName
-      EvaluationPeriods: 2
+      EvaluationPeriods: 15
       MetricName: Status
       Namespace: !Sub ${Stack}/${ClusterName}
       Period: 60
       Statistic: Maximum
+      # Green = 0, Yellow = 1, Red = 2
       Threshold: 0
+
+  RedClusterStatusAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Ref AlertChannel
+      AlarmDescription: !Sub Red cluster status in ${Stage}
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: Cluster
+          Value: !Ref ClusterName
+      EvaluationPeriods: 1
+      MetricName: Status
+      Namespace: !Sub ${Stack}/${ClusterName}
+      Period: 60
+      Statistic: Maximum
+      # Green = 0, Yellow = 1, Red = 2
+      Threshold: 1
 
   DataNodeJvmHeapUsageAlarm:
     Type: AWS::CloudWatch::Alarm
