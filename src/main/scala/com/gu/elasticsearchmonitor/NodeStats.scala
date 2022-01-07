@@ -16,7 +16,7 @@ object NodeStats {
   val logger: Logger = LoggerFactory.getLogger(this.getClass)
 
   def fetchAndParse(host: String, httpClient: OkHttpClient, mapper: ObjectMapper): Either[String, NodeStats] = {
-    val nodeStatsRequest = new Request.Builder()
+    val nodeStatsRequest = Request.Builder()
       .url(s"$host/_nodes/stats")
       .build()
 

@@ -18,15 +18,15 @@ object ClusterHealth {
   val logger: Logger = LoggerFactory.getLogger(this.getClass)
 
   def fetchAndParse(host: String, httpClient: OkHttpClient, mapper: ObjectMapper): Either[String, ClusterHealth] = {
-    val clusterHealthRequest = new Request.Builder()
+    val clusterHealthRequest = Request.Builder()
       .url(s"$host/_cluster/health")
       .build()
 
-    val shardAllocationRequest = new Request.Builder()
+    val shardAllocationRequest = Request.Builder()
       .url(s"$host/_cluster/allocation/explain")
       .build()
 
-    val nodeInfoRequest = new Request.Builder()
+    val nodeInfoRequest = Request.Builder()
       .url(s"$host/_nodes")
       .build()
 
