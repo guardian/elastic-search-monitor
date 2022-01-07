@@ -6,7 +6,7 @@ description:= "Monitors your elastic search cluster and reports metrics to cloud
 
 version := "1.0"
 
-scalaVersion := "2.12.2"
+scalaVersion := "2.13.7"
 
 val awsSdkVersion = "1.11.377"
 

@@ -5,7 +5,7 @@ import com.amazonaws.services.ec2.model.{ DescribeInstancesRequest, Filter, Inst
 import okhttp3.{ OkHttpClient, Request }
 import org.slf4j.{ Logger, LoggerFactory }
 
-import collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.annotation.tailrec
 import scala.util.{ Failure, Random, Success, Try }
 
