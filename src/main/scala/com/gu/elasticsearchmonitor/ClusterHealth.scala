@@ -58,7 +58,7 @@ object ClusterHealth {
       case Success(response) =>
         Left(s"Unable to fetch the cluster health status. Http code ${response.code}")
 
-      case Failure(NonFatal(e)) =>
+      case Failure(e) =>
         logger.error("Unable to fetch cluster health", e)
         Left(s"Unable to fetch cluster health: ${e.getMessage}")
     }

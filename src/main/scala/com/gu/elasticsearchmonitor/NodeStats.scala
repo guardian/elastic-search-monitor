@@ -30,7 +30,7 @@ object NodeStats {
           nodes = root.get("nodes").iterator().asScala.toList.map(Node.parse)))
       case Success(response) =>
         Left(s"Unable to fetch the node stats. Http code ${response.code}")
-      case Failure(NonFatal(e)) =>
+      case Failure(e) =>
         logger.error("Unable to fetch node stats", e)
         Left(s"Unable to fetch node stats: ${e.getMessage}")
     }
