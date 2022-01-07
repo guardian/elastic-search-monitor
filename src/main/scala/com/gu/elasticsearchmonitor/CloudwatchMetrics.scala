@@ -6,7 +6,7 @@ import com.amazonaws.services.cloudwatch.AmazonCloudWatch
 import com.amazonaws.services.cloudwatch.model.{ Dimension, MetricDatum, PutMetricDataRequest, StandardUnit }
 import org.slf4j.{ Logger, LoggerFactory }
 
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 class CloudwatchMetrics(env: Env, cloudWatch: AmazonCloudWatch) {
 

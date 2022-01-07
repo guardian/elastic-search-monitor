@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.{ JsonNode, ObjectMapper }
 import okhttp3.{ OkHttpClient, Request }
 import org.slf4j.{ Logger, LoggerFactory }
 
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 import scala.util.control.NonFatal
 import scala.util.{ Failure, Success, Try }
 
