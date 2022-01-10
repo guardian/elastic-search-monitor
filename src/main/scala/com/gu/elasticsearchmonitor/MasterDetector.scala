@@ -5,7 +5,7 @@ import com.amazonaws.services.ec2.model.{ DescribeInstancesRequest, Filter, Inst
 import okhttp3.{ OkHttpClient, Request }
 import org.slf4j.{ Logger, LoggerFactory }
 
-import collection.JavaConverters._
+import scala.jdk.CollectionConverters.*
 import scala.annotation.tailrec
 import scala.util.{ Failure, Random, Success, Try }
 
@@ -17,10 +17,10 @@ class MasterDetector(amazonEC2: AmazonEC2, httpClient: OkHttpClient) {
     @tailrec
     def queryInstances(instancesFromPreviousRequest: List[Instance], nextToken: Option[String]): List[Instance] = {
       val filters = List(
-        new Filter("tag:Stage", List(env.stage).asJava),
-        new Filter("tag:Stack", List(env.tagQueryStack).asJava),
-        new Filter("tag:App", List(env.tagQueryApp).asJava))
-      val dir = new DescribeInstancesRequest().withFilters(filters: _*).withNextToken(nextToken.orNull)
+        Filter("tag:Stage", List(env.stage).asJava),
+        Filter("tag:Stack", List(env.tagQueryStack).asJava),
+        Filter("tag:App", List(env.tagQueryApp).asJava))
+      val dir = DescribeInstancesRequest().withFilters(filters: _*).withNextToken(nextToken.orNull)
       val result = amazonEC2.describeInstances(dir)
       val instances = instancesFromPreviousRequest ++ result.getReservations.asScala.flatMap(_.getInstances.asScala)
       if (result.getNextToken == null) {
@@ -31,7 +31,7 @@ class MasterDetector(amazonEC2: AmazonEC2, httpClient: OkHttpClient) {
     }
 
     def masterRespondsToHealthCheck(instanceName: String): Boolean = {
-      val clusterHealthRequest = new Request.Builder()
+      val clusterHealthRequest = Request.Builder()
         .url(s"$instanceName/_cluster/health")
         .build()
 

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.{ JsonNode, ObjectMapper }
 import okhttp3.{ OkHttpClient, Request }
 import org.slf4j.{ Logger, LoggerFactory }
 
-import collection.JavaConverters._
+import scala.jdk.CollectionConverters.*
 import scala.util.control.NonFatal
 import scala.util.{ Failure, Success, Try }
 
@@ -16,7 +16,7 @@ object NodeStats {
   val logger: Logger = LoggerFactory.getLogger(this.getClass)
 
   def fetchAndParse(host: String, httpClient: OkHttpClient, mapper: ObjectMapper): Either[String, NodeStats] = {
-    val nodeStatsRequest = new Request.Builder()
+    val nodeStatsRequest = Request.Builder()
       .url(s"$host/_nodes/stats")
       .build()
 
@@ -30,7 +30,7 @@ object NodeStats {
           nodes = root.get("nodes").iterator().asScala.toList.map(Node.parse)))
       case Success(response) =>
         Left(s"Unable to fetch the node stats. Http code ${response.code}")
-      case Failure(NonFatal(e)) =>
+      case Failure(e) =>
         logger.error("Unable to fetch node stats", e)
         Left(s"Unable to fetch node stats: ${e.getMessage}")
     }

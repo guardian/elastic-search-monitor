@@ -6,15 +6,14 @@ description:= "Monitors your elastic search cluster and reports metrics to cloud
 
 version := "1.0"
 
-scalaVersion := "2.12.2"
+scalaVersion := "3.1.0"
 
 val awsSdkVersion = "1.11.377"
 
 scalacOptions ++= Seq(
   "-deprecation",
   "-encoding", "UTF-8",
-  "-target:jvm-1.8",
-  "-Ywarn-dead-code"
+  "-Xtarget:8"
 )
 
 libraryDependencies ++= Seq(

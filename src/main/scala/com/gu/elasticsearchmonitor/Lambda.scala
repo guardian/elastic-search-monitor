@@ -44,12 +44,12 @@ object Lambda {
     process(env)
   }
 
-  val httpClient = new OkHttpClient()
+  val httpClient = OkHttpClient()
 
-  val mapper = new ObjectMapper()
+  val mapper = ObjectMapper()
 
-  val credentials = new AWSCredentialsProviderChain(
-    new ProfileCredentialsProvider("deployTools"),
+  val credentials = AWSCredentialsProviderChain(
+    ProfileCredentialsProvider("deployTools"),
     DefaultAWSCredentialsProviderChain.getInstance)
 
   val cloudwatch: AmazonCloudWatch = AmazonCloudWatchClient.builder()
@@ -62,9 +62,9 @@ object Lambda {
     .withRegion("eu-west-1")
     .build
 
-  val cloudwatchMetrics = new CloudwatchMetrics(Env(), cloudwatch)
+  val cloudwatchMetrics = CloudwatchMetrics(Env(), cloudwatch)
 
-  val masterDetector = new MasterDetector(ec2, httpClient)
+  val masterDetector = MasterDetector(ec2, httpClient)
 
   def process(env: Env): Unit = {
     def resolveMasterHostName(masterInfo: MasterInformation): Either[String, String] =

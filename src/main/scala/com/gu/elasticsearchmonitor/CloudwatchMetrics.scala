@@ -6,18 +6,18 @@ import com.amazonaws.services.cloudwatch.AmazonCloudWatch
 import com.amazonaws.services.cloudwatch.model.{ Dimension, MetricDatum, PutMetricDataRequest, StandardUnit }
 import org.slf4j.{ Logger, LoggerFactory }
 
-import collection.JavaConverters._
+import scala.jdk.CollectionConverters.*
 
 class CloudwatchMetrics(env: Env, cloudWatch: AmazonCloudWatch) {
 
   val logger: Logger = LoggerFactory.getLogger(this.getClass)
 
   def metricDatum(metricName: String, value: Double, unit: StandardUnit, dimensions: List[(String, String)], now: Date): MetricDatum = {
-    val metricDatum = new MetricDatum
+    val metricDatum = MetricDatum()
 
     val cloudwatchDimensions = dimensions.map {
       case (dimensionName, dimensionValue) =>
-        val cloudwatchDimension = new Dimension
+        val cloudwatchDimension = Dimension()
         cloudwatchDimension.setName(dimensionName)
         cloudwatchDimension.setValue(dimensionValue)
         cloudwatchDimension
@@ -31,7 +31,7 @@ class CloudwatchMetrics(env: Env, cloudWatch: AmazonCloudWatch) {
   }
 
   def buildMetricData(clusterName: String, clusterHealth: ClusterHealth, nodeStats: NodeStats): List[MetricDatum] = {
-    val now = new Date() // consistent timestamp across metrics
+    val now = Date() // consistent timestamp across metrics
 
     def elasticSearchStatusToDouble(status: String): Double = status match {
       case "green" => 0d
@@ -68,7 +68,7 @@ class CloudwatchMetrics(env: Env, cloudWatch: AmazonCloudWatch) {
   }
 
   def buildMasterMetricData(clusterName: String, masterInformation: MasterInformation): List[MetricDatum] = {
-    val now = new Date() // consistent timestamp across metrics
+    val now = Date() // consistent timestamp across metrics
     val defaultDimensions = List("Cluster" -> clusterName)
     List(
       metricDatum("NumberOfMasterNodes", masterInformation.numberOfMasterInstances, StandardUnit.Count, defaultDimensions, now),
@@ -82,7 +82,7 @@ class CloudwatchMetrics(env: Env, cloudWatch: AmazonCloudWatch) {
 
     metricBatches.foreach { batch =>
       logger.info(s"Sending a batch of ${batch.size} metrics to cloudwatch")
-      val putMetricDataRequest = new PutMetricDataRequest()
+      val putMetricDataRequest = PutMetricDataRequest()
       putMetricDataRequest.setNamespace(s"${env.stack}/$clusterName")
       putMetricDataRequest.setMetricData(batch.asJava)
 

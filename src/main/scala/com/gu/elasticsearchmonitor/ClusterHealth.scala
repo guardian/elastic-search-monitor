@@ -18,15 +18,15 @@ object ClusterHealth {
   val logger: Logger = LoggerFactory.getLogger(this.getClass)
 
   def fetchAndParse(host: String, httpClient: OkHttpClient, mapper: ObjectMapper): Either[String, ClusterHealth] = {
-    val clusterHealthRequest = new Request.Builder()
+    val clusterHealthRequest = Request.Builder()
       .url(s"$host/_cluster/health")
       .build()
 
-    val shardAllocationRequest = new Request.Builder()
+    val shardAllocationRequest = Request.Builder()
       .url(s"$host/_cluster/allocation/explain")
       .build()
 
-    val nodeInfoRequest = new Request.Builder()
+    val nodeInfoRequest = Request.Builder()
       .url(s"$host/_nodes")
       .build()
 
@@ -58,7 +58,7 @@ object ClusterHealth {
       case Success(response) =>
         Left(s"Unable to fetch the cluster health status. Http code ${response.code}")
 
-      case Failure(NonFatal(e)) =>
+      case Failure(e) =>
         logger.error("Unable to fetch cluster health", e)
         Left(s"Unable to fetch cluster health: ${e.getMessage}")
     }
