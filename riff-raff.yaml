@@ -16,4 +16,4 @@ deployments:
     parameters:
       prependStackToCloudFormationStackName: false
       cloudFormationStackName: elastic-search-monitor
-      templatePath: cfn.yaml
+      templatePath: ElasticSearchMonitor-PROD.template.json
