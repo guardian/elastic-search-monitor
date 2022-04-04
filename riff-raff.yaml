@@ -4,10 +4,11 @@ regions: [eu-west-1]
 deployments:
   elastic-search-monitor:
     type: aws-lambda
+    app: elastic-search-monitor
     parameters:
       bucket: deploy-tools-dist
-      functionNames: [elastic-search-monitor-]
       fileName: elastic-search-monitor.jar
+      lookupByTags: true
       prefixStack: false
     dependencies: [elastic-search-monitor-cfn]
   elastic-search-monitor-cfn:
