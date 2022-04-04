@@ -23,12 +23,12 @@ case class Env(
 
 object Env {
   def apply(): Env = Env(
-    Option(System.getenv("App")).getOrElse("DEV"),
-    Option(System.getenv("Stack")).getOrElse("DEV"),
-    Option(System.getenv("Stage")).getOrElse("DEV"),
-    Option(System.getenv("TagQueryApp")).getOrElse("DEV"),
-    Option(System.getenv("TagQueryStack")).getOrElse("DEV"),
-    Option(System.getenv("ClusterName")).getOrElse("DEV"))
+    Option(System.getenv("APP")).getOrElse("DEV"),
+    Option(System.getenv("STACK")).getOrElse("DEV"),
+    Option(System.getenv("STAGE")).getOrElse("DEV"),
+    Option(System.getenv("TAG_QUERY_APP")).getOrElse("DEV"),
+    Option(System.getenv("TAG_QUERY_STACK")).getOrElse("DEV"),
+    Option(System.getenv("CLUSTER_NAME")).getOrElse("DEV"))
 }
 
 object Lambda {

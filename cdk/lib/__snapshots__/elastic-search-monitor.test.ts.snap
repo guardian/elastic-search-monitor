@@ -2,88 +2,134 @@
 
 exports[`The ElasticSearchMonitor stack matches the snapshot 1`] = `
 Object {
-  "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Monitors your elastic search cluster and reports metrics to cloudwatch",
   "Parameters": Object {
-    "App": Object {
-      "Default": "elastic-search-monitor",
-      "Description": "Application name",
-      "Type": "String",
-    },
-    "ClusterName": Object {
-      "Description": "Cluster name to use in the cloudwatch metrics",
-      "Type": "String",
-    },
     "ClusterSecurityGroup": Object {
-      "Description": "A security group allowing the lambda to connect to port 9200 over TCP",
+      "Description": "A security group allowing the lambda to connect to Elasticsearch on port 9200 over TCP",
       "Type": "AWS::EC2::SecurityGroup::Id",
     },
-    "DeployBucket": Object {
-      "Default": "deploy-tools-dist",
-      "Description": "Bucket where RiffRaff uploads artifacts on deploy",
-      "Type": "String",
+    "DistributionBucketName": Object {
+      "Default": "/account/services/artifact.bucket",
+      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
+      "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "Stack": Object {
-      "Default": "deploy",
-      "Description": "Stack name",
-      "Type": "String",
-    },
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
-    "Subnets": Object {
-      "Description": "Subnets (within your VPC)",
-      "Type": "List<AWS::EC2::Subnet::Id>",
-    },
-    "TagQueryApp": Object {
-      "Description": "Application name of the cluster master node",
-      "Type": "String",
-    },
-    "TagQueryStack": Object {
-      "Description": "Stack name of the cluster master node",
-      "Type": "String",
+    "PrivateSubnets": Object {
+      "Default": "/account/vpc/primary/subnets/private",
+      "Description": "A list of private subnets",
+      "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
     },
     "VpcId": Object {
-      "Description": "Vpc id (same VPC as your ELK stack)",
-      "Type": "AWS::EC2::VPC::Id",
+      "Default": "/account/vpc/primary/id",
+      "Description": "Virtual Private Cloud to run EC2 instances within. Should NOT be the account default VPC.",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
     },
   },
   "Resources": Object {
-    "DailyEvent": Object {
+    "ScheduledLambda68819433": Object {
+      "DependsOn": Array [
+        "ScheduledLambdaServiceRoleDefaultPolicy790AF47E",
+        "ScheduledLambdaServiceRoleC946C6E8",
+      ],
       "Properties": Object {
-        "Description": "Event sent to process the previous day of data",
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "DistributionBucketName",
+          },
+          "S3Key": "deploy/TEST/elastic-search-monitor/elastic-search-monitor.jar",
+        },
+        "Description": "Monitors your Elasticsearch cluster and reports metrics to CloudWatch",
+        "Environment": Object {
+          "Variables": Object {
+            "APP": "elastic-search-monitor",
+            "CLUSTER_NAME": "elk",
+            "STACK": "deploy",
+            "STAGE": "TEST",
+            "TAG_QUERY_APP": "elk-es-master",
+            "TAG_QUERY_STACK": "deploy",
+          },
+        },
+        "Handler": "com.gu.elasticsearchmonitor.Lambda::handler",
+        "MemorySize": 1024,
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "ScheduledLambdaServiceRoleC946C6E8",
+            "Arn",
+          ],
+        },
+        "Runtime": "java8",
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "elastic-search-monitor",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/elastic-search-monitor",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "deploy",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "Timeout": 30,
+        "VpcConfig": Object {
+          "SecurityGroupIds": Array [
+            Object {
+              "Ref": "ClusterSecurityGroup",
+            },
+          ],
+          "SubnetIds": Object {
+            "Ref": "PrivateSubnets",
+          },
+        },
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ScheduledLambdaScheduledLambdarate1minute0064C7EC4": Object {
+      "Properties": Object {
         "ScheduleExpression": "rate(1 minute)",
+        "State": "ENABLED",
         "Targets": Array [
           Object {
             "Arn": Object {
-              "Fn::GetAtt": "Lambda.Arn",
+              "Fn::GetAtt": Array [
+                "ScheduledLambda68819433",
+                "Arn",
+              ],
             },
-            "Id": "Lambda",
+            "Id": "Target0",
           },
         ],
       },
       "Type": "AWS::Events::Rule",
     },
-    "DailyEventLambdaPermission": Object {
+    "ScheduledLambdaScheduledLambdarate1minute0AllowEventRuleElasticSearchMonitorScheduledLambdaDFD7F6B32CFE3E7A": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
-          "Fn::GetAtt": "Lambda.Arn",
+          "Fn::GetAtt": Array [
+            "ScheduledLambda68819433",
+            "Arn",
+          ],
         },
         "Principal": "events.amazonaws.com",
         "SourceArn": Object {
-          "Fn::GetAtt": "DailyEvent.Arn",
+          "Fn::GetAtt": Array [
+            "ScheduledLambdaScheduledLambdarate1minute0064C7EC4",
+            "Arn",
+          ],
         },
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ExecutionRole": Object {
+    "ScheduledLambdaServiceRoleC946C6E8": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -91,81 +137,43 @@ Object {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": Object {
-                "Service": Array [
-                  "lambda.amazonaws.com",
-                ],
+                "Service": "lambda.amazonaws.com",
               },
             },
           ],
+          "Version": "2012-10-17",
         },
-        "Path": "/",
-        "Policies": Array [
+        "ManagedPolicyArns": Array [
           Object {
-            "PolicyDocument": Object {
-              "Statement": Object {
-                "Action": Array [
-                  "logs:CreateLogGroup",
-                  "logs:CreateLogStream",
-                  "logs:PutLogEvents",
-                ],
-                "Effect": "Allow",
-                "Resource": "arn:aws:logs:*:*:*",
-              },
-            },
-            "PolicyName": "logs",
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
           },
           Object {
-            "PolicyDocument": Object {
-              "Statement": Object {
-                "Action": Array [
-                  "lambda:InvokeFunction",
-                ],
-                "Effect": "Allow",
-                "Resource": "*",
-              },
-            },
-            "PolicyName": "lambda",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Object {
-                "Action": Array [
-                  "ec2:CreateNetworkInterface",
-                  "ec2:DescribeNetworkInterfaces",
-                  "ec2:DeleteNetworkInterface",
-                ],
-                "Effect": "Allow",
-                "Resource": "*",
-              },
-            },
-            "PolicyName": "vpc",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Object {
-                "Action": Array [
-                  "ec2:DescribeInstances",
-                ],
-                "Effect": "Allow",
-                "Resource": "*",
-              },
-            },
-            "PolicyName": "ec2-detection",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Object {
-                "Action": Array [
-                  "cloudwatch:PutMetricData",
-                ],
-                "Effect": "Allow",
-                "Resource": "*",
-              },
-            },
-            "PolicyName": "cloudwatch",
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole",
+              ],
+            ],
           },
         ],
         "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "elastic-search-monitor",
+          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
@@ -186,79 +194,124 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "Lambda": Object {
+    "ScheduledLambdaServiceRoleDefaultPolicy790AF47E": Object {
       "Properties": Object {
-        "Code": Object {
-          "S3Bucket": Object {
-            "Ref": "DeployBucket",
-          },
-          "S3Key": Object {
-            "Fn::Sub": "\${Stack}/\${Stage}/\${App}/\${App}.jar",
-          },
-        },
-        "Description": "Monitors your elastic search cluster and reports metrics to cloudwatch",
-        "Environment": Object {
-          "Variables": Object {
-            "App": Object {
-              "Ref": "App",
-            },
-            "ClusterName": Object {
-              "Ref": "ClusterName",
-            },
-            "Stack": Object {
-              "Ref": "Stack",
-            },
-            "Stage": Object {
-              "Ref": "Stage",
-            },
-            "TagQueryApp": Object {
-              "Ref": "TagQueryApp",
-            },
-            "TagQueryStack": Object {
-              "Ref": "TagQueryStack",
-            },
-          },
-        },
-        "FunctionName": Object {
-          "Fn::Sub": "\${App}-\${Stage}",
-        },
-        "Handler": "com.gu.elasticsearchmonitor.Lambda::handler",
-        "MemorySize": 256,
-        "Role": Object {
-          "Fn::GetAtt": "ExecutionRole.Arn",
-        },
-        "Runtime": "java8",
-        "Tags": Array [
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "gu:repo",
-            "Value": "guardian/elastic-search-monitor",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "deploy",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": "TEST",
-          },
-        ],
-        "Timeout": 60,
-        "VpcConfig": Object {
-          "SecurityGroupIds": Array [
+        "PolicyDocument": Object {
+          "Statement": Array [
             Object {
-              "Ref": "ClusterSecurityGroup",
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      Object {
+                        "Ref": "DistributionBucketName",
+                      },
+                    ],
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      Object {
+                        "Ref": "DistributionBucketName",
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ssm:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/TEST/deploy/elastic-search-monitor",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ssm:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/TEST/deploy/elastic-search-monitor/*",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DeleteNetworkInterface",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": "ec2:DescribeInstances",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": "cloudwatch:PutMetricData",
+              "Effect": "Allow",
+              "Resource": "*",
             },
           ],
-          "SubnetIds": Object {
-            "Ref": "Subnets",
-          },
+          "Version": "2012-10-17",
         },
+        "PolicyName": "ScheduledLambdaServiceRoleDefaultPolicy790AF47E",
+        "Roles": Array [
+          Object {
+            "Ref": "ScheduledLambdaServiceRoleC946C6E8",
+          },
+        ],
       },
-      "Type": "AWS::Lambda::Function",
+      "Type": "AWS::IAM::Policy",
     },
   },
 }
