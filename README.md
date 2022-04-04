@@ -1,11 +1,11 @@
 # elastic-search-monitor
 
-Monitors your elastic search cluster and reports metrics to cloudwatch
+Monitors your Elasticsearch cluster and reports metrics to CloudWatch.
 
 ## Running locally
 
-* Get a janus token
-* Export the following variables, adapting them for your account (this is for deploy tool)
+* Get Janus credentials
+* Export the following variables, adapting them for your account (this is for Deploy Tools)
 
 ```bash
 export TagQueryApp="elk-es-master"
