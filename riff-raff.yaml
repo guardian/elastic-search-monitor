@@ -17,3 +17,6 @@ deployments:
       prependStackToCloudFormationStackName: false
       cloudFormationStackName: elastic-search-monitor
       templatePath: ElasticSearchMonitor-PROD.template.json
+      # We should be able to remove the parameters after the initial cdk deployment
+      templateParameters:
+        VpcId: "/account/vpc/primary/id"
