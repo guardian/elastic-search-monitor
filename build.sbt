@@ -33,4 +33,4 @@ assemblyJarName := s"${name.value}.jar"
 riffRaffPackageType := assembly.value
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffArtifactResources += (file("cfn.yaml"), s"${name.value}-cfn/cfn.yaml")
+riffRaffArtifactResources += (file("cdk/cdk.out/ElasticSearchMonitor-PROD.template.json"), s"${name.value}-cfn/ElasticSearchMonitor-PROD.template.json")
