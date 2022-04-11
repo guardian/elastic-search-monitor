@@ -4,10 +4,11 @@ regions: [eu-west-1]
 deployments:
   elastic-search-monitor:
     type: aws-lambda
+    app: elastic-search-monitor
     parameters:
       bucket: deploy-tools-dist
-      functionNames: [elastic-search-monitor-]
       fileName: elastic-search-monitor.jar
+      lookupByTags: true
       prefixStack: false
     dependencies: [elastic-search-monitor-cfn]
   elastic-search-monitor-cfn:
@@ -17,3 +18,6 @@ deployments:
       prependStackToCloudFormationStackName: false
       cloudFormationStackName: elastic-search-monitor
       templatePath: ElasticSearchMonitor-PROD.template.json
+      # We should be able to remove the parameters after the initial cdk deployment
+      templateParameters:
+        VpcId: "/account/vpc/primary/id"
