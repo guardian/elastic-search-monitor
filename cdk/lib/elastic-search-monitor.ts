@@ -77,14 +77,14 @@ export class ElasticSearchMonitor extends GuStack {
     });
     additionalPolicies.map((policy) => scheduledLambda.addToRolePolicy(policy));
 
-    const topicForElasticsearchAlerts = new GuSnsTopic(this, "AlertChannel", {
-      displayName: `Elastic search alert channel for ${this.stage}`,
-      topicName: `Elastic-Search-Alerts-${this.stage}`,
-      existingLogicalId: {
-        logicalId: "AlertChannel",
-        reason: "Migrated from CloudFormation",
-      },
-    });
+    const topicForElasticsearchAlerts = new GuSnsTopic(
+      this,
+      "ElkAlertChannel",
+      {
+        displayName: `ELK alert channel for ${this.stage}`,
+        topicName: `elk-alerts-${this.stage}`,
+      }
+    );
 
     topicForElasticsearchAlerts.addSubscription(
       new EmailSubscription("devx.sec.ops@guardian.co.uk")

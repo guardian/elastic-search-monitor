@@ -24,41 +24,6 @@ Object {
     },
   },
   "Resources": Object {
-    "AlertChannel55105F42": Object {
-      "Properties": Object {
-        "DisplayName": "Elastic search alert channel for TEST",
-        "Tags": Array [
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "gu:repo",
-            "Value": "guardian/elastic-search-monitor",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "deploy",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": "TEST",
-          },
-        ],
-        "TopicName": "Elastic-Search-Alerts-TEST",
-      },
-      "Type": "AWS::SNS::Topic",
-    },
-    "AlertChanneldevxsecopsguardiancoukBB0521BF": Object {
-      "Properties": Object {
-        "Endpoint": "devx.sec.ops@guardian.co.uk",
-        "Protocol": "email",
-        "TopicArn": Object {
-          "Ref": "AlertChannel55105F42",
-        },
-      },
-      "Type": "AWS::SNS::Subscription",
-    },
     "ClusterStatusAlarm75657749": Object {
       "Properties": Object {
         "ActionsEnabled": true,
@@ -78,7 +43,7 @@ Object {
                 ":",
                 Object {
                   "Fn::GetAtt": Array [
-                    "AlertChannel55105F42",
+                    "ElkAlertChannel1915A337",
                     "TopicName",
                   ],
                 },
@@ -122,7 +87,7 @@ Object {
                 ":",
                 Object {
                   "Fn::GetAtt": Array [
-                    "AlertChannel55105F42",
+                    "ElkAlertChannel1915A337",
                     "TopicName",
                   ],
                 },
@@ -166,7 +131,7 @@ Object {
                 ":",
                 Object {
                   "Fn::GetAtt": Array [
-                    "AlertChannel55105F42",
+                    "ElkAlertChannel1915A337",
                     "TopicName",
                   ],
                 },
@@ -210,7 +175,7 @@ Object {
                 ":",
                 Object {
                   "Fn::GetAtt": Array [
-                    "AlertChannel55105F42",
+                    "ElkAlertChannel1915A337",
                     "TopicName",
                   ],
                 },
@@ -235,6 +200,41 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
+    "ElkAlertChannel1915A337": Object {
+      "Properties": Object {
+        "DisplayName": "ELK alert channel for TEST",
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/elastic-search-monitor",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "deploy",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "TopicName": "elk-alerts-TEST",
+      },
+      "Type": "AWS::SNS::Topic",
+    },
+    "ElkAlertChanneldevxsecopsguardiancouk276AF53D": Object {
+      "Properties": Object {
+        "Endpoint": "devx.sec.ops@guardian.co.uk",
+        "Protocol": "email",
+        "TopicArn": Object {
+          "Ref": "ElkAlertChannel1915A337",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
     "MasterNodeCountAlarmFE01B272": Object {
       "Properties": Object {
         "ActionsEnabled": true,
@@ -254,7 +254,7 @@ Object {
                 ":",
                 Object {
                   "Fn::GetAtt": Array [
-                    "AlertChannel55105F42",
+                    "ElkAlertChannel1915A337",
                     "TopicName",
                   ],
                 },
@@ -298,7 +298,7 @@ Object {
                 ":",
                 Object {
                   "Fn::GetAtt": Array [
-                    "AlertChannel55105F42",
+                    "ElkAlertChannel1915A337",
                     "TopicName",
                   ],
                 },
