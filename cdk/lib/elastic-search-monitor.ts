@@ -170,12 +170,14 @@ export class ElasticSearchMonitor extends GuStack {
     Double check the disk space used (curl -s 'localhost:9200/_cat/allocation?v') and access the logs to see if you can
     find any useful error messages ($ grep "ERROR" /var/log/syslog).`;
 
+    const fifteenPercentDiskSpaceInBytes = 743819616190;
+
     new GuAlarm(this, "DataNodeLowStorageAlarm", {
       ...lessThanAlarmProps,
       alarmDescription: lowStorageDescription,
       evaluationPeriods: 2,
       metric: metric("MinFreeDiskSpace"),
-      threshold: 280375465082.88,
+      threshold: fifteenPercentDiskSpaceInBytes,
     });
   }
 }

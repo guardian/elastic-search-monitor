@@ -202,7 +202,7 @@ Object {
         "Namespace": "deploy/elk",
         "Period": 60,
         "Statistic": "Minimum",
-        "Threshold": 280375465082.88,
+        "Threshold": 743819616190,
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
