@@ -24,6 +24,311 @@ Object {
     },
   },
   "Resources": Object {
+    "ClusterStatusAlarm75657749": Object {
+      "Properties": Object {
+        "ActionsEnabled": true,
+        "AlarmActions": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:aws:sns:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                Object {
+                  "Ref": "AWS::AccountId",
+                },
+                ":",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ElkAlertChannel1915A337",
+                    "TopicName",
+                  ],
+                },
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "Unexpected cluster status in TEST",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "Cluster",
+            "Value": "elk",
+          },
+        ],
+        "EvaluationPeriods": 15,
+        "MetricName": "Status",
+        "Namespace": "deploy/elk",
+        "Period": 60,
+        "Statistic": "Maximum",
+        "Threshold": 0,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "DataNodeCountAlarm0ECE9147": Object {
+      "Properties": Object {
+        "ActionsEnabled": true,
+        "AlarmActions": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:aws:sns:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                Object {
+                  "Ref": "AWS::AccountId",
+                },
+                ":",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ElkAlertChannel1915A337",
+                    "TopicName",
+                  ],
+                },
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "Unexpected count of data nodes in TEST",
+        "ComparisonOperator": "LessThanThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "Cluster",
+            "Value": "elk",
+          },
+        ],
+        "EvaluationPeriods": 2,
+        "MetricName": "NumberOfDataNodes",
+        "Namespace": "deploy/elk",
+        "Period": 60,
+        "Statistic": "Minimum",
+        "Threshold": 3,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "DataNodeJvmHeapUsageAlarmDECB3926": Object {
+      "Properties": Object {
+        "ActionsEnabled": true,
+        "AlarmActions": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:aws:sns:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                Object {
+                  "Ref": "AWS::AccountId",
+                },
+                ":",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ElkAlertChannel1915A337",
+                    "TopicName",
+                  ],
+                },
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "A data node is using too much of its heap in TEST",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "Cluster",
+            "Value": "elk",
+          },
+        ],
+        "EvaluationPeriods": 2,
+        "MetricName": "MaxJvmHeapUsage",
+        "Namespace": "deploy/elk",
+        "Period": 60,
+        "Statistic": "Maximum",
+        "Threshold": 85,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "DataNodeLowStorageAlarm72D42DBD": Object {
+      "Properties": Object {
+        "ActionsEnabled": true,
+        "AlarmActions": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:aws:sns:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                Object {
+                  "Ref": "AWS::AccountId",
+                },
+                ":",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ElkAlertChannel1915A337",
+                    "TopicName",
+                  ],
+                },
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "A data node is running on less than 85% disk space
+    (this is considered a low disk watermark: https://www.datadoghq.com/blog/elasticsearch-unassigned-shards/#reason-5-low-disk-watermark).
+    In order to troubleshoot this, follow the instructions on this Trello card: https://trello.com/c/68Bi7pwB.
+    Or, if you can't access that you can do the following: Find the id of the instance that is experiencing problems by
+    checking https://logs.gutools.co.uk/cerebro. SSH onto the instance ($ ssm ssh -i \\"instance-id\\" -p deployTools).
+    Double check the disk space used (curl -s 'localhost:9200/_cat/allocation?v') and access the logs to see if you can
+    find any useful error messages ($ grep \\"ERROR\\" /var/log/syslog).",
+        "ComparisonOperator": "LessThanThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "Cluster",
+            "Value": "elk",
+          },
+        ],
+        "EvaluationPeriods": 2,
+        "MetricName": "MinFreeDiskSpace",
+        "Namespace": "deploy/elk",
+        "Period": 60,
+        "Statistic": "Minimum",
+        "Threshold": 743819616190,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ElkAlertChannel1915A337": Object {
+      "Properties": Object {
+        "DisplayName": "ELK alert channel for TEST",
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/elastic-search-monitor",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "deploy",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "TopicName": "elk-alerts-TEST",
+      },
+      "Type": "AWS::SNS::Topic",
+    },
+    "ElkAlertChanneldevxsecopsguardiancouk276AF53D": Object {
+      "Properties": Object {
+        "Endpoint": "devx.sec.ops@guardian.co.uk",
+        "Protocol": "email",
+        "TopicArn": Object {
+          "Ref": "ElkAlertChannel1915A337",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "MasterNodeCountAlarmFE01B272": Object {
+      "Properties": Object {
+        "ActionsEnabled": true,
+        "AlarmActions": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:aws:sns:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                Object {
+                  "Ref": "AWS::AccountId",
+                },
+                ":",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ElkAlertChannel1915A337",
+                    "TopicName",
+                  ],
+                },
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "Unexpected count of master nodes in TEST",
+        "ComparisonOperator": "LessThanThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "Cluster",
+            "Value": "elk",
+          },
+        ],
+        "EvaluationPeriods": 2,
+        "MetricName": "NumberOfRespondingMastersNodes",
+        "Namespace": "deploy/elk",
+        "Period": 60,
+        "Statistic": "Minimum",
+        "Threshold": 3,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "RedClusterStatusAlarm42644991": Object {
+      "Properties": Object {
+        "ActionsEnabled": true,
+        "AlarmActions": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:aws:sns:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                Object {
+                  "Ref": "AWS::AccountId",
+                },
+                ":",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ElkAlertChannel1915A337",
+                    "TopicName",
+                  ],
+                },
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "Red cluster status in TEST",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "Cluster",
+            "Value": "elk",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "Status",
+        "Namespace": "deploy/elk",
+        "Period": 60,
+        "Statistic": "Maximum",
+        "Threshold": 1,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
     "ScheduledLambda68819433": Object {
       "DependsOn": Array [
         "ScheduledLambdaServiceRoleDefaultPolicy790AF47E",
