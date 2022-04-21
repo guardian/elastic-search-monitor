@@ -53,7 +53,11 @@ export class ElasticSearchMonitor extends GuStack {
       description:
         "Monitors your Elasticsearch cluster and reports metrics to CloudWatch",
       handler: "com.gu.elasticsearchmonitor.Lambda::handler",
-      monitoringConfiguration: { noMonitoring: true },
+      monitoringConfiguration: {
+        toleratedErrorPercentage: 99,
+        numberOfMinutesAboveThresholdBeforeAlarm: 30,
+        snsTopicName: "devx-alerts",
+      },
       rules: [{ schedule: Schedule.rate(Duration.minutes(1)) }],
       runtime: Runtime.JAVA_8,
       // This lambda needs access to the Deploy Tools VPC so that it can talk to Prism
