@@ -2,6 +2,22 @@
 
 exports[`The ElasticSearchMonitor stack matches the snapshot 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuVpcParameter",
+      "GuSubnetListParameter",
+      "GuDistributionBucketParameter",
+      "GuScheduledLambda",
+      "GuLambdaErrorPercentageAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+    ],
+    "gu:cdk:version": "TEST",
+  },
   "Parameters": Object {
     "ClusterSecurityGroup": Object {
       "Description": "A security group allowing the lambda to connect to Elasticsearch on port 9200 over TCP",
@@ -646,7 +662,7 @@ Object {
                       Object {
                         "Ref": "DistributionBucketName",
                       },
-                      "/*",
+                      "/deploy/TEST/elastic-search-monitor/elastic-search-monitor.jar",
                     ],
                   ],
                 },

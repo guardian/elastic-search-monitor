@@ -1,17 +1,17 @@
-import { ComparisonOperator, Metric } from "@aws-cdk/aws-cloudwatch";
-import { SecurityGroup } from "@aws-cdk/aws-ec2";
-import { Schedule } from "@aws-cdk/aws-events";
-import { PolicyStatement } from "@aws-cdk/aws-iam";
-import { Runtime } from "@aws-cdk/aws-lambda";
-import { EmailSubscription } from "@aws-cdk/aws-sns-subscriptions";
-import type { App } from "@aws-cdk/core";
-import { CfnParameter, Duration } from "@aws-cdk/core";
 import { GuScheduledLambda } from "@guardian/cdk";
 import { GuAlarm } from "@guardian/cdk/lib/constructs/cloudwatch";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import { GuVpc } from "@guardian/cdk/lib/constructs/ec2";
-import { GuSnsTopic } from "@guardian/cdk/lib/constructs/sns";
+import type { App } from "aws-cdk-lib";
+import { CfnParameter, Duration } from "aws-cdk-lib";
+import { ComparisonOperator, Metric } from "aws-cdk-lib/aws-cloudwatch";
+import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
+import { Schedule } from "aws-cdk-lib/aws-events";
+import { PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Runtime } from "aws-cdk-lib/aws-lambda";
+import { Topic } from "aws-cdk-lib/aws-sns";
+import { EmailSubscription } from "aws-cdk-lib/aws-sns-subscriptions";
 
 const app = "elastic-search-monitor";
 
@@ -81,14 +81,10 @@ export class ElasticSearchMonitor extends GuStack {
     });
     additionalPolicies.map((policy) => scheduledLambda.addToRolePolicy(policy));
 
-    const topicForElasticsearchAlerts = new GuSnsTopic(
-      this,
-      "ElkAlertChannel",
-      {
-        displayName: `ELK alert channel for ${this.stage}`,
-        topicName: `elk-alerts-${this.stage}`,
-      }
-    );
+    const topicForElasticsearchAlerts = new Topic(this, "ElkAlertChannel", {
+      displayName: `ELK alert channel for ${this.stage}`,
+      topicName: `elk-alerts-${this.stage}`,
+    });
 
     topicForElasticsearchAlerts.addSubscription(
       new EmailSubscription("devx.sec.ops@guardian.co.uk")

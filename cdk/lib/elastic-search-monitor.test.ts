@@ -1,6 +1,5 @@
-import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert";
-import { App } from "@aws-cdk/core";
+import { App } from "aws-cdk-lib";
+import { Template } from "aws-cdk-lib/assertions";
 import { ElasticSearchMonitor } from "./elastic-search-monitor";
 
 describe("The ElasticSearchMonitor stack", () => {
@@ -10,6 +9,6 @@ describe("The ElasticSearchMonitor stack", () => {
       stack: "deploy",
       stage: "TEST",
     });
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack)).toMatchSnapshot();
   });
 });
