@@ -12,8 +12,7 @@ val awsSdkVersion = "1.11.377"
 
 scalacOptions ++= Seq(
   "-deprecation",
-  "-encoding", "UTF-8",
-  "-Xtarget:8"
+  "-encoding", "UTF-8"
 )
 
 libraryDependencies ++= Seq(
