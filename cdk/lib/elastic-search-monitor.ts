@@ -65,7 +65,7 @@ export class ElasticSearchMonitor extends GuStack {
         snsTopicName: "devx-alerts",
       },
       rules: [{ schedule: Schedule.rate(Duration.minutes(1)) }],
-      runtime: Runtime.JAVA_8,
+      runtime: Runtime.JAVA_11,
       // This lambda needs access to the Deploy Tools VPC so that it can talk to Prism
       vpc: GuVpc.fromIdParameter(this, "vpc"),
       vpcSubnets: {
