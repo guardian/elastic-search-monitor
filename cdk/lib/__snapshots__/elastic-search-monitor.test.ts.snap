@@ -355,7 +355,7 @@ Object {
           "S3Bucket": Object {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "deploy/TEST/elastic-search-monitor/elastic-search-monitor.jar",
+          "S3Key": "deploy/TEST/elastic-search-monitor/DEV.jar",
         },
         "Description": "Monitors your Elasticsearch cluster and reports metrics to CloudWatch",
         "Environment": Object {
@@ -662,7 +662,7 @@ Object {
                       Object {
                         "Ref": "DistributionBucketName",
                       },
-                      "/deploy/TEST/elastic-search-monitor/elastic-search-monitor.jar",
+                      "/deploy/TEST/elastic-search-monitor/DEV.jar",
                     ],
                   ],
                 },

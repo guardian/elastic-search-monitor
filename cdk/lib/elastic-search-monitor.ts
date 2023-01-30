@@ -15,8 +15,12 @@ import { EmailSubscription } from "aws-cdk-lib/aws-sns-subscriptions";
 
 const app = "elastic-search-monitor";
 
+export interface ElasticSearchMonitorProps extends GuStackProps {
+  buildNumber: string;
+}
+
 export class ElasticSearchMonitor extends GuStack {
-  constructor(scope: App, id: string, props: GuStackProps) {
+  constructor(scope: App, id: string, props: ElasticSearchMonitorProps) {
     super(scope, id, props);
     const clusterSecurityGroupId = new CfnParameter(
       this,
@@ -50,7 +54,7 @@ export class ElasticSearchMonitor extends GuStack {
     ];
     const scheduledLambda = new GuScheduledLambda(this, "ScheduledLambda", {
       app,
-      fileName: "elastic-search-monitor.jar",
+      fileName: `${props.buildNumber}.jar`,
       environment: {
         TAG_QUERY_APP: "elk-es-master",
         TAG_QUERY_STACK: "deploy",

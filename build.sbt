@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
 
 enablePlugins(RiffRaffArtifact)
 
-assemblyJarName := s"${name.value}.jar"
+assemblyJarName := s"${sys.env.getOrElse("BUILD_NUMBER", "DEV")}.jar"
 riffRaffPackageType := assembly.value
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")

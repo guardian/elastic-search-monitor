@@ -8,6 +8,7 @@ describe("The ElasticSearchMonitor stack", () => {
     const stack = new ElasticSearchMonitor(app, "ElasticSearchMonitor", {
       stack: "deploy",
       stage: "TEST",
+      buildNumber: "DEV",
     });
     expect(Template.fromStack(stack)).toMatchSnapshot();
   });
