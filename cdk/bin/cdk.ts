@@ -1,9 +1,12 @@
 import "source-map-support/register";
-import { App } from "aws-cdk-lib";
+import { GuRootExperimental } from "@guardian/cdk/lib/experimental/constructs";
 import { ElasticSearchMonitor } from "../lib/elastic-search-monitor";
 
-const app = new App();
+const app = new GuRootExperimental();
 new ElasticSearchMonitor(app, "ElasticSearchMonitor-PROD", {
   stack: "deploy",
   stage: "PROD",
+  env: {
+    region: "eu-west-1",
+  },
 });

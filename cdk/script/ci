@@ -26,3 +26,6 @@ yarn install --frozen-lockfile
 yarn lint
 yarn test
 yarn synth
+
+# move generated file to root directory
+mv "cdk.out/riff-raff.yaml" ../riff-raff.yaml
