@@ -1,0 +1,46 @@
+allowedStages:
+  - PROD
+deployments:
+  lambda-upload-eu-west-1-deploy-elastic-search-monitor:
+    type: aws-lambda
+    stacks:
+      - deploy
+    regions:
+      - eu-west-1
+    app: elastic-search-monitor
+    contentDirectory: elastic-search-monitor
+    parameters:
+      bucketSsmLookup: true
+      lookupByTags: true
+      fileName: elastic-search-monitor.jar
+    actions:
+      - uploadLambda
+  cfn-eu-west-1-deploy-elastic-search-monitor:
+    type: cloud-formation
+    regions:
+      - eu-west-1
+    stacks:
+      - deploy
+    app: elastic-search-monitor
+    contentDirectory: cdk.out
+    parameters:
+      templateStagePaths:
+        PROD: ElasticSearchMonitor-PROD.template.json
+    dependencies:
+      - lambda-upload-eu-west-1-deploy-elastic-search-monitor
+  lambda-update-eu-west-1-deploy-elastic-search-monitor:
+    type: aws-lambda
+    stacks:
+      - deploy
+    regions:
+      - eu-west-1
+    app: elastic-search-monitor
+    contentDirectory: elastic-search-monitor
+    parameters:
+      bucketSsmLookup: true
+      lookupByTags: true
+      fileName: elastic-search-monitor.jar
+    actions:
+      - updateLambda
+    dependencies:
+      - cfn-eu-west-1-deploy-elastic-search-monitor
