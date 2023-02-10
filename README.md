@@ -13,3 +13,5 @@ export TagQueryStack="deploy"
 export ClusterName="elk"
 ```
 * Then run it by using `sbt run`
+
+test
