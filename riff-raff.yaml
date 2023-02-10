@@ -12,7 +12,7 @@ deployments:
     parameters:
       bucketSsmLookup: true
       lookupByTags: true
-      fileName: elastic-search-monitor.jar
+      fileName: 93.jar
     actions:
       - uploadLambda
   cfn-eu-west-1-deploy-elastic-search-monitor:
@@ -28,19 +28,3 @@ deployments:
         PROD: ElasticSearchMonitor-PROD.template.json
     dependencies:
       - lambda-upload-eu-west-1-deploy-elastic-search-monitor
-  lambda-update-eu-west-1-deploy-elastic-search-monitor:
-    type: aws-lambda
-    stacks:
-      - deploy
-    regions:
-      - eu-west-1
-    app: elastic-search-monitor
-    contentDirectory: elastic-search-monitor
-    parameters:
-      bucketSsmLookup: true
-      lookupByTags: true
-      fileName: elastic-search-monitor.jar
-    actions:
-      - updateLambda
-    dependencies:
-      - cfn-eu-west-1-deploy-elastic-search-monitor
