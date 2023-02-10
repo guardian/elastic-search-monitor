@@ -9,6 +9,7 @@ import { ComparisonOperator, Metric } from "aws-cdk-lib/aws-cloudwatch";
 import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import { Schedule } from "aws-cdk-lib/aws-events";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
+import type { CfnFunction } from "aws-cdk-lib/aws-lambda";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { Topic } from "aws-cdk-lib/aws-sns";
 import { EmailSubscription } from "aws-cdk-lib/aws-sns-subscriptions";
@@ -84,6 +85,10 @@ export class ElasticSearchMonitor extends GuStack {
         ),
       ],
     });
+
+    const cfnLambda = scheduledLambda.node.defaultChild as CfnFunction;
+    cfnLambda.snapStart = { applyOn: "PublishedVersions" };
+
     additionalPolicies.map((policy) => scheduledLambda.addToRolePolicy(policy));
 
     const topicForElasticsearchAlerts = new Topic(this, "ElkAlertChannel", {

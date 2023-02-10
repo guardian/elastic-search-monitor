@@ -377,6 +377,9 @@ Object {
           ],
         },
         "Runtime": "java11",
+        "SnapStart": Object {
+          "ApplyOn": "PublishedVersions",
+        },
         "Tags": Array [
           Object {
             "Key": "App",
@@ -420,7 +423,7 @@ Object {
         },
         "FunctionVersion": Object {
           "Fn::GetAtt": Array [
-            "ScheduledLambdaCurrentVersionC4FAB78107a726524e749e4cf54a82c3739c64c9",
+            "ScheduledLambdaCurrentVersionC4FAB781dac5e6c9d5f2062b110dd13d3974cd2b",
             "Version",
           ],
         },
@@ -428,7 +431,7 @@ Object {
       },
       "Type": "AWS::Lambda::Alias",
     },
-    "ScheduledLambdaCurrentVersionC4FAB78107a726524e749e4cf54a82c3739c64c9": Object {
+    "ScheduledLambdaCurrentVersionC4FAB781dac5e6c9d5f2062b110dd13d3974cd2b": Object {
       "Properties": Object {
         "FunctionName": Object {
           "Ref": "ScheduledLambda68819433",
