@@ -413,6 +413,29 @@ Object {
       },
       "Type": "AWS::Lambda::Function",
     },
+    "ScheduledLambdaAliasForLambda8D5BCFFF": Object {
+      "Properties": Object {
+        "FunctionName": Object {
+          "Ref": "ScheduledLambda68819433",
+        },
+        "FunctionVersion": Object {
+          "Fn::GetAtt": Array [
+            "ScheduledLambdaCurrentVersionC4FAB78107a726524e749e4cf54a82c3739c64c9",
+            "Version",
+          ],
+        },
+        "Name": "TEST",
+      },
+      "Type": "AWS::Lambda::Alias",
+    },
+    "ScheduledLambdaCurrentVersionC4FAB78107a726524e749e4cf54a82c3739c64c9": Object {
+      "Properties": Object {
+        "FunctionName": Object {
+          "Ref": "ScheduledLambda68819433",
+        },
+      },
+      "Type": "AWS::Lambda::Version",
+    },
     "ScheduledLambdaErrorPercentageAlarmForLambda6F1E8BCD": Object {
       "Properties": Object {
         "ActionsEnabled": true,
@@ -528,10 +551,7 @@ Object {
         "Targets": Array [
           Object {
             "Arn": Object {
-              "Fn::GetAtt": Array [
-                "ScheduledLambda68819433",
-                "Arn",
-              ],
+              "Ref": "ScheduledLambdaAliasForLambda8D5BCFFF",
             },
             "Id": "Target0",
           },
@@ -539,14 +559,11 @@ Object {
       },
       "Type": "AWS::Events::Rule",
     },
-    "ScheduledLambdaScheduledLambdarate1minute0AllowEventRuleElasticSearchMonitorScheduledLambdaDFD7F6B32CFE3E7A": Object {
+    "ScheduledLambdaScheduledLambdarate1minute0AllowEventRuleElasticSearchMonitorScheduledLambdaAliasForLambda3B0095D95F72C854": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "ScheduledLambda68819433",
-            "Arn",
-          ],
+          "Ref": "ScheduledLambdaAliasForLambda8D5BCFFF",
         },
         "Principal": "events.amazonaws.com",
         "SourceArn": Object {

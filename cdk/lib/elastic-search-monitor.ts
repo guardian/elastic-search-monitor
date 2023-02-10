@@ -55,6 +55,7 @@ export class ElasticSearchMonitor extends GuStack {
     const scheduledLambda = new GuScheduledLambda(this, "ScheduledLambda", {
       app,
       fileName: `${props.buildNumber}.jar`,
+      enableVersioning: true,
       environment: {
         TAG_QUERY_APP: "elk-es-master",
         TAG_QUERY_STACK: "deploy",
