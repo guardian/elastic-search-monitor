@@ -347,16 +347,16 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@guardian/cdk@49.1.0":
-  version "49.1.0"
-  resolved "https://registry.yarnpkg.com/@guardian/cdk/-/cdk-49.1.0.tgz#e9a9209416066ccb3016a824fe09adcd13c313bd"
-  integrity sha512-2QKzixZxBx7c53ITpXG3hHZVoUqu+awd7PGZtx132MtrjV5hEN3G7sLtICdezMLxXPbIcagHRfk8yasu1Zi7bA==
+"@guardian/cdk@50.0.0-beta.1":
+  version "50.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@guardian/cdk/-/cdk-50.0.0-beta.1.tgz#396114eb5282dbbd743d2baf1e77a27e64ccf17a"
+  integrity sha512-2gSYq2muLR8Eklqk8aJvqwtd4JqhjedcnbpanDsk3EIOEwH/SBbD0Zx4sToDGQplm18UcCCekbPcbB1IcxPgBg==
   dependencies:
     "@oclif/core" "1.24.2"
     aws-cdk-lib "2.59.0"
-    aws-sdk "^2.1296.0"
+    aws-sdk "^2.1306.0"
     chalk "^4.1.2"
-    codemaker "^1.73.0"
+    codemaker "^1.74.0"
     constructs "10.1.215"
     git-url-parse "^13.1.0"
     js-yaml "^4.1.0"
@@ -1100,10 +1100,10 @@ aws-cdk@2.59.0:
   optionalDependencies:
     fsevents "2.3.2"
 
-aws-sdk@^2.1296.0:
-  version "2.1303.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1303.0.tgz#c339c515a7b419bb9c081c5da6731f18c738793e"
-  integrity sha512-KTzMliy60ParQgmnHB3jcAZVQmyLV1ZlNK4jUDP6Hzb0SPZFkGHzzjfSb224o8pB/HfR5n4fT3hOUVWMjISwdA==
+aws-sdk@^2.1306.0:
+  version "2.1312.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1312.0.tgz#5b52ba9cef0984b0d86a1755a79b11c3ec775797"
+  integrity sha512-NG6ERxxxU6p+CDWrq7wLinp0siKRcCNN98iY0qr/2WKZbz5JCtDyiQV/l+6jLmNKP5qIT5z++jnDy9cgNP6ICQ==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -1363,10 +1363,10 @@ co@^4.6.0:
   resolved "https://registry.yarnpkg.com/co/-/co-4.6.0.tgz#6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
   integrity sha1-bqa989hTrlTMuOR7+gvz+QMfsYQ=
 
-codemaker@^1.73.0:
-  version "1.73.0"
-  resolved "https://registry.yarnpkg.com/codemaker/-/codemaker-1.73.0.tgz#5b3b280759a31ee259bbcdc50ba9bd46e115b787"
-  integrity sha512-pgVFCAbR0Yw/qTrV/W8R7cXWJouhONMRf8sNCjmAGJyV3MFaLN4sUPdUkzYUu7LCkuHPh0nvYRlExWzrkhm7vw==
+codemaker@^1.74.0:
+  version "1.74.0"
+  resolved "https://registry.yarnpkg.com/codemaker/-/codemaker-1.74.0.tgz#113d679c5f2d6bc6bb04621448930e48cf8cec40"
+  integrity sha512-i6fAyWpXAYN/dd8hvzFPJ7+Yb/a23+BmeCu/lPn0KDpDs/KpNKoz/I3Iq9JD4AL9bMc1b7kBeBV+UF6kS6EMEg==
   dependencies:
     camelcase "^6.3.0"
     decamelize "^5.0.1"
