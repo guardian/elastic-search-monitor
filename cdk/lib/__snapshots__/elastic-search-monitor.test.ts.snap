@@ -67,7 +67,7 @@ Object {
             ],
           },
         ],
-        "AlarmDescription": "Unexpected cluster status in TEST",
+        "AlarmDescription": "Unexpected cluster status in TEST. See cloudwatch metric value for current cluster status (Green = 0, Yellow = 1, Red = 2)",
         "ComparisonOperator": "GreaterThanThreshold",
         "Dimensions": Array [
           Object {
@@ -328,7 +328,7 @@ Object {
             ],
           },
         ],
-        "AlarmDescription": "Red cluster status in TEST",
+        "AlarmDescription": "Red cluster status in TEST. See cloudwatch metric value for current cluster status (Green = 0, Yellow = 1, Red = 2)",
         "ComparisonOperator": "GreaterThanThreshold",
         "Dimensions": Array [
           Object {
