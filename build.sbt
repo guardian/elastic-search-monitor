@@ -21,9 +21,7 @@ libraryDependencies ++= Seq(
   "com.squareup.okhttp3" % "okhttp" % "3.11.0",
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsSdkVersion,
   "com.amazonaws" % "aws-java-sdk-ec2" % awsSdkVersion,
-  "com.fasterxml.jackson.core" % "jackson-core" % "2.6.7",
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.6.7.1",
-  "com.fasterxml.jackson.core" % "jackson-annotations" % "2.6.7"
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.14.2",
 )
 
 enablePlugins(RiffRaffArtifact)
