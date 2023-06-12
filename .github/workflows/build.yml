@@ -32,5 +32,10 @@ jobs:
         yarn test
         yarn synth
         mv "cdk.out/riff-raff.yaml" ../riff-raff.yaml
+    - name: AWS Auth
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+        aws-region: eu-west-1
     - run: sbt clean compile test riffRaffUpload
       
