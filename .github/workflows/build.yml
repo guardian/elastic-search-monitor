@@ -45,5 +45,5 @@ jobs:
         aws-region: eu-west-1
     - run: sbt clean compile test riffRaffUpload
       env:
-        BUILD_NUMBER: ${{GITHUB_RUN_NUMBER_WITH_OFFSET}}
+        BUILD_NUMBER: $GITHUB_RUN_NUMBER_WITH_OFFSET
       
