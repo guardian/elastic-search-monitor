@@ -1,0 +1,36 @@
+name: build
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      # required by aws-actions/configure-aws-credentials
+      id-token: write
+      contents: read
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup SBT environment
+      uses: Jtalk/setup-sbt@v2
+      with:
+        version: 1.5.5
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2.5.2
+      with:
+        node-version-file: .nvmrc
+    - name: CI
+      working-directory: cdk
+      run: |
+        npm i -g yarn
+        yarn install --frozen-lockfile
+        yarn lint
+        yarn test
+        yarn synth
+        mv "cdk.out/riff-raff.yaml" ../riff-raff.yaml
+    - run: sbt clean compile test riffRaffUpload
+      
