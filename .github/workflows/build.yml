@@ -14,34 +14,28 @@ jobs:
       id-token: write
       contents: read
     steps:
-    - name: run number with offset
-      env:
-        NUM: ${{ github.run_number }}
-      run: echo "GITHUB_RUN_NUMBER_WITH_OFFSET=$((10000+$NUM))" >> $GITHUB_ENV
     - uses: actions/checkout@v3
-    - name: Setup SBT environment
-      uses: Jtalk/setup-sbt@v2
+    - uses: actions/setup-java@v3
       with:
-        version: 1.5.5
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v2.5.2
+        distribution: 'corretto'
+        java-version: '8'
+        cache: 'sbt'
+    - uses: actions/setup-node@v3
       with:
         node-version-file: .nvmrc
     - name: CI
       working-directory: cdk
       run: |
-        npm i -g yarn
         yarn install --frozen-lockfile
         yarn lint
         yarn test
         yarn synth
-        mv "cdk.out/riff-raff.yaml" ../riff-raff.yaml
     - name: AWS Auth
       uses: aws-actions/configure-aws-credentials@v1
       with:
         role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
         aws-region: eu-west-1
-    - name: Build and Test project, and Assemble jar
+    - name: Build and Test project, Assemble jar, copy to root dir
       run: |
         sbt clean compile test assembly
         cp target/scala*/elastic-search-monitor.jar ./elastic-search-monitor.jar
@@ -49,9 +43,9 @@ jobs:
       uses: guardian/actions-riff-raff@v2
       with:
         app: elastic-search-monitor
-        configPath: riff-raff.yaml
+        configPath: cdk/cdk.out/riff-raff.yaml
         projectName: elastic-search-monitor
-        buildNumberOffset: 10000
+        buildNumberOffset: 99
         contentDirectories: |
           elastic-search-monitor:
           - elastic-search-monitor.jar
