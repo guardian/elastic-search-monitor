@@ -24,7 +24,7 @@ jobs:
       with:
         version: 1.5.5
     - name: Setup Node.js environment
-      uses: actions/setup-node@v2.5.2
+      uses: actions/setup-node@v3
       with:
         node-version-file: .nvmrc
     - name: CI
@@ -37,7 +37,7 @@ jobs:
         yarn synth
         mv "cdk.out/riff-raff.yaml" ../riff-raff.yaml
     - name: AWS Auth
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v2
       with:
         role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
         aws-region: eu-west-1
