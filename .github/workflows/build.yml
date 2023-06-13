@@ -41,6 +41,17 @@ jobs:
       with:
         role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
         aws-region: eu-west-1
-    - run: sbt clean compile test riffRaffUpload
-      env:
-        BUILD_NUMBER: ${{ env.GITHUB_RUN_NUMBER_WITH_OFFSET }}
+    - name: Build and Test project, and Assemble jar
+      run: sbt clean compile test assembly
+    - name: Upload to riff-raff
+      uses: guardian/actions-riff-raff@v2
+      with:
+        app: elastic-search-monitor
+        configPath: riff-raff.yaml
+        projectName: elastic-search-monitor
+        buildNumberOffset: 10000
+        contentDirectories: |
+          elastic-search-monitor:
+          - target/scala*/elastic-search-monitor.jar
+          cdk.out:
+          - cdk/cdk.out/ElasticSearchMonitor-PROD.template.json
