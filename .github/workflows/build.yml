@@ -49,7 +49,6 @@ jobs:
     - name: Upload to riff-raff
       uses: guardian/actions-riff-raff@v2
       with:
-        app: elastic-search-monitor
         configPath: cdk/cdk.out/riff-raff.yaml
         projectName: elastic-search-monitor
         buildNumberOffset: 99
