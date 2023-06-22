@@ -24,8 +24,6 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.14.2",
 )
 
-enablePlugins(RiffRaffArtifact)
-
 assembly / assemblyMergeStrategy := {
   case x if x.endsWith("module-info.class") => MergeStrategy.first
   case y =>
@@ -34,7 +32,3 @@ assembly / assemblyMergeStrategy := {
 }
 
 assemblyJarName := s"${name.value}.jar"
-riffRaffPackageType := assembly.value
-riffRaffUploadArtifactBucket := Option("riffraff-artifact")
-riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffArtifactResources += (file("cdk/cdk.out/ElasticSearchMonitor-PROD.template.json"), s"cdk.out/ElasticSearchMonitor-PROD.template.json")
