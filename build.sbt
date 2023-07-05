@@ -6,7 +6,7 @@ description:= "Monitors your elastic search cluster and reports metrics to cloud
 
 version := "1.0"
 
-scalaVersion := "3.1.0"
+scalaVersion := "3.1.3"
 
 val awsSdkVersion = "1.11.1034"
 
@@ -17,11 +17,11 @@ scalacOptions ++= Seq(
 
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.2",
-  "org.slf4j" % "slf4j-simple" % "1.7.25",
-  "com.squareup.okhttp3" % "okhttp" % "3.11.0",
+  "org.slf4j" % "slf4j-simple" % "1.7.36",
+  "com.squareup.okhttp3" % "okhttp" % "3.14.9",
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsSdkVersion,
   "com.amazonaws" % "aws-java-sdk-ec2" % awsSdkVersion,
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.14.2",
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.14.3",
 )
 
 assembly / assemblyMergeStrategy := {
