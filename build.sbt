@@ -6,7 +6,7 @@ description:= "Monitors your elastic search cluster and reports metrics to cloud
 
 version := "1.0"
 
-scalaVersion := "3.1.3"
+scalaVersion := "3.3.0"
 
 val awsSdkVersion = "1.12.505"
 
@@ -17,14 +17,15 @@ scalacOptions ++= Seq(
 
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.2",
-  "org.slf4j" % "slf4j-simple" % "1.7.36",
-  "com.squareup.okhttp3" % "okhttp" % "3.14.9",
+  "org.slf4j" % "slf4j-simple" % "2.0.7",
+  "com.squareup.okhttp3" % "okhttp" % "4.11.0",
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsSdkVersion,
   "com.amazonaws" % "aws-java-sdk-ec2" % awsSdkVersion,
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.14.3",
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.15.2",
 )
 
 assembly / assemblyMergeStrategy := {
+  case PathList("META-INF", _*) => MergeStrategy.discard
   case x if x.endsWith("module-info.class") => MergeStrategy.first
   case y =>
     val oldStrategy = (assembly / assemblyMergeStrategy).value
