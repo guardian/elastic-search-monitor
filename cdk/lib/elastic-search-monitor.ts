@@ -139,7 +139,7 @@ export class ElasticSearchMonitor extends GuStack {
     new GuAlarm(this, "ClusterStatusAlarm", {
       ...greaterThanAlarmProps,
       alarmDescription: `Unexpected cluster status in ${this.stage}. See cloudwatch metric value for current cluster status (Green = 0, Yellow = 1, Red = 2)`,
-      evaluationPeriods: 15,
+      evaluationPeriods: 30, // Tolerate yellow status for 30 mins before sending an alert
       metric: metric("Status"),
       // Green = 0, Yellow = 1, Red = 2
       threshold: 0,

@@ -75,7 +75,7 @@ Object {
             "Value": "elk",
           },
         ],
-        "EvaluationPeriods": 15,
+        "EvaluationPeriods": 30,
         "MetricName": "Status",
         "Namespace": "deploy/elk",
         "Period": 60,
