@@ -8,7 +8,7 @@ version := "1.0"
 
 scalaVersion := "3.3.0"
 
-val awsSdkVersion = "1.12.620"
+val awsSdkVersion = "1.12.625"
 
 scalacOptions ++= Seq(
   "-deprecation",
