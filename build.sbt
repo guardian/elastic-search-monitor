@@ -21,7 +21,7 @@ libraryDependencies ++= Seq(
   "com.squareup.okhttp3" % "okhttp" % "4.12.0",
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsSdkVersion,
   "com.amazonaws" % "aws-java-sdk-ec2" % awsSdkVersion,
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.15.4",
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.16.1",
 )
 
 assembly / assemblyMergeStrategy := {
