@@ -1,15 +1,15 @@
 package com.gu.elasticsearchmonitor
 
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
-import com.amazonaws.auth.{ AWSCredentialsProviderChain, DefaultAWSCredentialsProviderChain }
-import com.amazonaws.services.cloudwatch.{ AmazonCloudWatch, AmazonCloudWatchClient }
-import com.amazonaws.services.ec2.{ AmazonEC2, AmazonEC2Client }
-import com.amazonaws.services.lambda.runtime.Context
+import com.amazonaws.auth.{AWSCredentialsProviderChain, DefaultAWSCredentialsProviderChain}
+import com.amazonaws.services.cloudwatch.{AmazonCloudWatch, AmazonCloudWatchClient}
+import com.amazonaws.services.ec2.{AmazonEC2, AmazonEC2Client}
+import com.amazonaws.services.lambda.runtime.logging.LogLevel
+import com.amazonaws.services.lambda.runtime.{Context, LambdaLogger}
 import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.OkHttpClient
-import org.slf4j.{ Logger, LoggerFactory }
 
-import scala.util.{ Failure, Success, Try }
+import scala.util.{Failure, Success, Try}
 
 class LambdaInput()
 
@@ -33,15 +33,14 @@ object Env {
 
 object Lambda {
 
-  val logger: Logger = LoggerFactory.getLogger(this.getClass)
-
   /*
     Lambda entry point, it is referenced in the cloudformation
    */
   def handler(lambdaInput: LambdaInput, context: Context): Unit = {
     val env = Env()
-    logger.info(s"Starting $env")
-    process(env)
+    val logger: LambdaLogger = context.getLogger
+    logger.log(s"Starting $env", LogLevel.INFO)
+    process(env, logger)
   }
 
   val httpClient = OkHttpClient()
@@ -66,39 +65,43 @@ object Lambda {
 
   val masterDetector = MasterDetector(ec2, httpClient)
 
-  def process(env: Env): Unit = {
+  def process(env: Env, logger: LambdaLogger): Unit = {
     def resolveMasterHostName(masterInfo: MasterInformation): Either[String, String] =
       if (env.stage == "DEV") {
-        logger.info(s"would have resolved with master node ${masterInfo.aRandomMasterUrl}, but forcing back to localhost as the lambda is running locally")
+        logger.log(s"would have resolved with master node ${masterInfo.aRandomMasterUrl}, but forcing back to localhost as the lambda is running locally", LogLevel.INFO)
         Right("http://localhost:8000")
       } else Either.cond(masterInfo.aRandomMasterUrl.isDefined, masterInfo.aRandomMasterUrl.get, "No Master node!")
 
     def fetchAndSendMetrics = for {
-      masterInfo <- masterDetector.detectMasters(env)
+      masterInfo <- masterDetector.detectMasters(env, logger)
     } yield {
       val masterMetrics = cloudwatchMetrics.buildMasterMetricData(env.clusterName, masterInfo)
       val clusterMetrics = for {
         masterHostName <- resolveMasterHostName(masterInfo)
-        clusterHealth <- ClusterHealth.fetchAndParse(masterHostName, httpClient, mapper)
-        nodeStats <- NodeStats.fetchAndParse(masterHostName, httpClient, mapper)
+        clusterHealth <- ClusterHealth.fetchAndParse(masterHostName, httpClient, mapper, logger)
+        nodeStats <- NodeStats.fetchAndParse(masterHostName, httpClient, mapper, logger)
       } yield {
         cloudwatchMetrics.buildMetricData(env.clusterName, clusterHealth, nodeStats)
       }
-      clusterMetrics.left.foreach(error => logger.error(s"Couldn't fetch cluster health: $error"))
+      clusterMetrics.left.foreach(error => logger.log(s"Couldn't fetch cluster health: $error", LogLevel.ERROR))
 
       val allMetrics = masterMetrics ++ clusterMetrics.getOrElse(Nil)
-      cloudwatchMetrics.sendMetrics(env.clusterName, allMetrics)
+      cloudwatchMetrics.sendMetrics(env.clusterName, allMetrics, logger)
     }
 
     Try(fetchAndSendMetrics) match {
-      case Success(_) => logger.info(s"Successfully finished to send metrics to cloudwatch")
-      case Failure(e) => logger.error("Unable to finish processing the metrics", e)
+      case Success(_) => logger.log(s"Successfully finished to send metrics to cloudwatch", LogLevel.INFO)
+      case Failure(e) => logger.log(s"Unable to finish processing the metrics: $e", LogLevel.ERROR)
     }
   }
 }
 
 object TestIt {
   def main(args: Array[String]): Unit = {
-    println(Lambda.process(Env()))
+    // Implement a simple LambdaLogger so that we can run locally
+    val logger = new LambdaLogger:
+      override def log(message: String): Unit = println(message)
+      override def log(message: Array[Byte]): Unit = ??? // We never use this
+    println(Lambda.process(Env(), logger))
   }
 }

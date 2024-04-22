@@ -1,16 +1,14 @@
 package com.gu.elasticsearchmonitor
 
 import java.util.Date
-
 import com.amazonaws.services.cloudwatch.AmazonCloudWatch
 import com.amazonaws.services.cloudwatch.model.{ Dimension, MetricDatum, PutMetricDataRequest, StandardUnit }
-import org.slf4j.{ Logger, LoggerFactory }
+import com.amazonaws.services.lambda.runtime.LambdaLogger
+import com.amazonaws.services.lambda.runtime.logging.LogLevel
 
 import scala.jdk.CollectionConverters.*
 
 class CloudwatchMetrics(env: Env, cloudWatch: AmazonCloudWatch) {
-
-  val logger: Logger = LoggerFactory.getLogger(this.getClass)
 
   def metricDatum(metricName: String, value: Double, unit: StandardUnit, dimensions: List[(String, String)], now: Date): MetricDatum = {
     val metricDatum = MetricDatum()
@@ -75,13 +73,13 @@ class CloudwatchMetrics(env: Env, cloudWatch: AmazonCloudWatch) {
       metricDatum("NumberOfRespondingMastersNodes", masterInformation.numberOfRespondingMasters, StandardUnit.Count, defaultDimensions, now))
   }
 
-  def sendMetrics(clusterName: String, metrics: List[MetricDatum]): Unit = {
+  def sendMetrics(clusterName: String, metrics: List[MetricDatum], logger: LambdaLogger): Unit = {
 
-    logger.info(s"About to send ${metrics.size} metrics")
+    logger.log(s"About to send ${metrics.size} metrics", LogLevel.INFO)
     val metricBatches = metrics.grouped(20) // hard limit of 20 items on cloudwatch's side
 
     metricBatches.foreach { batch =>
-      logger.info(s"Sending a batch of ${batch.size} metrics to cloudwatch")
+      logger.log(s"Sending a batch of ${batch.size} metrics to cloudwatch", LogLevel.INFO)
       val putMetricDataRequest = PutMetricDataRequest()
       putMetricDataRequest.setNamespace(s"${env.stack}/$clusterName")
       putMetricDataRequest.setMetricData(batch.asJava)
