@@ -61,7 +61,7 @@ export class ElasticSearchMonitor extends GuStack {
       handler: "com.gu.elasticsearchmonitor.Lambda::handler",
       monitoringConfiguration: {
         toleratedErrorPercentage: 99,
-        numberOfMinutesAboveThresholdBeforeAlarm: 30,
+        numberOfEvaluationPeriodsAboveThresholdBeforeAlarm: 30,
         snsTopicName: "devx-alerts",
       },
       rules: [{ schedule: Schedule.rate(Duration.minutes(1)) }],
