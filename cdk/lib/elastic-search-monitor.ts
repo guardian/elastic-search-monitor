@@ -122,7 +122,7 @@ export class ElasticSearchMonitor extends GuStack {
 
     new GuAlarm(this, "DataNodeCountAlarm", {
       ...lessThanAlarmProps,
-      alarmDescription: `Unexpected count of data nodes in ${this.stage}`,
+      alarmDescription: `Unexpected count of data nodes in ${this.stage}. Runbook: https://docs.google.com/document/d/1PuEvL7L-CTV72Jx4OmiB3y5hlMmJR7Xz-YxYWAMiGdY`,
       evaluationPeriods: 2,
       metric: metric("NumberOfDataNodes"),
       threshold: 3,
@@ -130,7 +130,7 @@ export class ElasticSearchMonitor extends GuStack {
 
     new GuAlarm(this, "MasterNodeCountAlarm", {
       ...lessThanAlarmProps,
-      alarmDescription: `Unexpected count of master nodes in ${this.stage}`,
+      alarmDescription: `Unexpected count of master nodes in ${this.stage}. Runbook: https://docs.google.com/document/d/1PuEvL7L-CTV72Jx4OmiB3y5hlMmJR7Xz-YxYWAMiGdY`,
       evaluationPeriods: 2,
       metric: metric("NumberOfRespondingMastersNodes"),
       threshold: 3,
@@ -138,7 +138,7 @@ export class ElasticSearchMonitor extends GuStack {
 
     new GuAlarm(this, "ClusterStatusAlarm", {
       ...greaterThanAlarmProps,
-      alarmDescription: `Unexpected cluster status in ${this.stage}. See cloudwatch metric value for current cluster status (Green = 0, Yellow = 1, Red = 2)`,
+      alarmDescription: `Unexpected cluster status in ${this.stage}. See cloudwatch metric value for current cluster status (Green = 0, Yellow = 1, Red = 2). Runbook: https://docs.google.com/document/d/1PuEvL7L-CTV72Jx4OmiB3y5hlMmJR7Xz-YxYWAMiGdY`,
       evaluationPeriods: 30, // Tolerate yellow status for 30 mins before sending an alert
       metric: metric("Status"),
       // Green = 0, Yellow = 1, Red = 2
@@ -147,7 +147,7 @@ export class ElasticSearchMonitor extends GuStack {
 
     new GuAlarm(this, "RedClusterStatusAlarm", {
       ...greaterThanAlarmProps,
-      alarmDescription: `Red cluster status in ${this.stage}. See cloudwatch metric value for current cluster status (Green = 0, Yellow = 1, Red = 2)`,
+      alarmDescription: `Red cluster status in ${this.stage}. See cloudwatch metric value for current cluster status (Green = 0, Yellow = 1, Red = 2). Runbook: https://docs.google.com/document/d/1PuEvL7L-CTV72Jx4OmiB3y5hlMmJR7Xz-YxYWAMiGdY`,
       evaluationPeriods: 1,
       metric: metric("Status"),
       // Green = 0, Yellow = 1, Red = 2

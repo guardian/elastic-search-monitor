@@ -67,7 +67,7 @@ Object {
             ],
           },
         ],
-        "AlarmDescription": "Unexpected cluster status in TEST. See cloudwatch metric value for current cluster status (Green = 0, Yellow = 1, Red = 2)",
+        "AlarmDescription": "Unexpected cluster status in TEST. See cloudwatch metric value for current cluster status (Green = 0, Yellow = 1, Red = 2). Runbook: https://docs.google.com/document/d/1PuEvL7L-CTV72Jx4OmiB3y5hlMmJR7Xz-YxYWAMiGdY",
         "ComparisonOperator": "GreaterThanThreshold",
         "Dimensions": Array [
           Object {
@@ -111,7 +111,7 @@ Object {
             ],
           },
         ],
-        "AlarmDescription": "Unexpected count of data nodes in TEST",
+        "AlarmDescription": "Unexpected count of data nodes in TEST. Runbook: https://docs.google.com/document/d/1PuEvL7L-CTV72Jx4OmiB3y5hlMmJR7Xz-YxYWAMiGdY",
         "ComparisonOperator": "LessThanThreshold",
         "Dimensions": Array [
           Object {
@@ -284,7 +284,7 @@ Object {
             ],
           },
         ],
-        "AlarmDescription": "Unexpected count of master nodes in TEST",
+        "AlarmDescription": "Unexpected count of master nodes in TEST. Runbook: https://docs.google.com/document/d/1PuEvL7L-CTV72Jx4OmiB3y5hlMmJR7Xz-YxYWAMiGdY",
         "ComparisonOperator": "LessThanThreshold",
         "Dimensions": Array [
           Object {
@@ -328,7 +328,7 @@ Object {
             ],
           },
         ],
-        "AlarmDescription": "Red cluster status in TEST. See cloudwatch metric value for current cluster status (Green = 0, Yellow = 1, Red = 2)",
+        "AlarmDescription": "Red cluster status in TEST. See cloudwatch metric value for current cluster status (Green = 0, Yellow = 1, Red = 2). Runbook: https://docs.google.com/document/d/1PuEvL7L-CTV72Jx4OmiB3y5hlMmJR7Xz-YxYWAMiGdY",
         "ComparisonOperator": "GreaterThanThreshold",
         "Dimensions": Array [
           Object {
