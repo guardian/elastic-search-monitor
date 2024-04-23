@@ -1,8 +1,9 @@
 package com.gu.elasticsearchmonitor
 
+import com.amazonaws.services.lambda.runtime.LambdaLogger
+import com.amazonaws.services.lambda.runtime.logging.LogLevel
 import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.{ OkHttpClient, Request }
-import org.slf4j.{ Logger, LoggerFactory }
 
 import scala.util.control.NonFatal
 import scala.util.{ Failure, Success, Try }
@@ -15,9 +16,7 @@ case class ClusterHealth(
 
 object ClusterHealth {
 
-  val logger: Logger = LoggerFactory.getLogger(this.getClass)
-
-  def fetchAndParse(host: String, httpClient: OkHttpClient, mapper: ObjectMapper): Either[String, ClusterHealth] = {
+  def fetchAndParse(host: String, httpClient: OkHttpClient, mapper: ObjectMapper, logger: LambdaLogger): Either[String, ClusterHealth] = {
     val clusterHealthRequest = Request.Builder()
       .url(s"$host/_cluster/health")
       .build()
@@ -35,18 +34,18 @@ object ClusterHealth {
     val result = clusterHealthResponse match {
       case Success(response) if response.code == 200 =>
         val root = mapper.readTree(response.body.string)
-        logger.info("Fetched the cluster health")
+        logger.log("Fetched the cluster health", LogLevel.INFO)
         val clusterStatus = root.get("status").asText
         if (clusterStatus != "green") {
           val requestAttempts = for {
             shardRequest <- Try(httpClient.newCall(shardAllocationRequest).execute())
             nodeRequest <- Try(httpClient.newCall(nodeInfoRequest).execute())
           } yield {
-            logger.warn(s"Cluster is in $clusterStatus status. Shard allocation info: ${shardRequest.body.string} | Node info: ${nodeRequest.body.string}")
+            logger.log(s"Cluster is in $clusterStatus status. Shard allocation info: ${shardRequest.body.string} | Node info: ${nodeRequest.body.string}", LogLevel.WARN)
           }
           requestAttempts.recover {
             case exception =>
-              logger.warn(s"Failed to obtain debug information about cluster status due to $exception")
+              logger.log(s"Failed to obtain debug information about cluster status due to $exception", LogLevel.WARN)
           }
         }
         Right(ClusterHealth(
@@ -59,7 +58,7 @@ object ClusterHealth {
         Left(s"Unable to fetch the cluster health status. Http code ${response.code}")
 
       case Failure(e) =>
-        logger.error("Unable to fetch cluster health", e)
+        logger.log(s"Unable to fetch cluster health: $e", LogLevel.ERROR)
         Left(s"Unable to fetch cluster health: ${e.getMessage}")
     }
 

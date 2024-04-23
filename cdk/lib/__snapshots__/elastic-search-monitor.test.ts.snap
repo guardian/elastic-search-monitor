@@ -369,6 +369,9 @@ Object {
           },
         },
         "Handler": "com.gu.elasticsearchmonitor.Lambda::handler",
+        "LoggingConfig": Object {
+          "LogFormat": "JSON",
+        },
         "MemorySize": 1024,
         "Role": Object {
           "Fn::GetAtt": Array [
@@ -449,7 +452,7 @@ Object {
           "Fn::Join": Array [
             "",
             Array [
-              "High error % from ",
+              "High error percentage from ",
               Object {
                 "Ref": "ScheduledLambda68819433",
               },

@@ -2,8 +2,9 @@ package com.gu.elasticsearchmonitor
 
 import com.amazonaws.services.ec2.AmazonEC2
 import com.amazonaws.services.ec2.model.{ DescribeInstancesRequest, Filter, Instance }
+import com.amazonaws.services.lambda.runtime.LambdaLogger
+import com.amazonaws.services.lambda.runtime.logging.LogLevel
 import okhttp3.{ OkHttpClient, Request }
-import org.slf4j.{ Logger, LoggerFactory }
 
 import scala.jdk.CollectionConverters.*
 import scala.annotation.tailrec
@@ -11,9 +12,7 @@ import scala.util.{ Failure, Random, Success, Try }
 
 class MasterDetector(amazonEC2: AmazonEC2, httpClient: OkHttpClient) {
 
-  val logger: Logger = LoggerFactory.getLogger(this.getClass)
-
-  def detectMasters(env: Env): Either[String, MasterInformation] = {
+  def detectMasters(env: Env, logger: LambdaLogger): Either[String, MasterInformation] = {
     @tailrec
     def queryInstances(instancesFromPreviousRequest: List[Instance], nextToken: Option[String]): List[Instance] = {
       val filters = List(
@@ -47,17 +46,17 @@ class MasterDetector(amazonEC2: AmazonEC2, httpClient: OkHttpClient) {
     Try(queryInstances(Nil, None)) match {
       case Success(instances) =>
         val instanceNames = instances.map(instance => s"http://${instance.getPrivateIpAddress}:9200")
-        logger.info(s"Identified these instances as potential candidates: $instanceNames")
+        logger.log(s"Identified these instances as potential candidates: $instanceNames", LogLevel.INFO)
         val aliveInstances = instanceNames.filter(masterRespondsToHealthCheck)
 
         val masterInfo = MasterInformation(
           numberOfMasterInstances = instanceNames.size,
           numberOfRespondingMasters = aliveInstances.size,
           aRandomMasterUrl = Random.shuffle(aliveInstances).headOption) //any master should do
-        logger.info(s"Found the following master information: $masterInfo")
+        logger.log(s"Found the following master information: $masterInfo", LogLevel.INFO)
         Right(masterInfo)
       case Failure(e) =>
-        logger.error("Unable to fetch master instances", e)
+        logger.log(s"Unable to fetch master instances: $e", LogLevel.ERROR)
         Left(s"Unable to fetch master instances: ${e.getMessage}")
     }
 
