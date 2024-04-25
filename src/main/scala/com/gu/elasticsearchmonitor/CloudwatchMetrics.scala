@@ -46,19 +46,19 @@ class CloudwatchMetrics(env: Env, cloudWatch: AmazonCloudWatch) {
     val nodeMetrics = nodeStats.nodes.flatMap { node =>
       val dimensions = defaultDimensions ++ List("InstanceId" -> node.name)
       List(
-        metricDatum("FreeDiskSpace", node.dataFree.toDouble, StandardUnit.Bytes, dimensions, now),
+        metricDatum("AvailableDiskSpace", node.dataAvailable.toDouble, StandardUnit.Bytes, dimensions, now),
         metricDatum("TotalDiskSpace", node.dataTotal.toDouble, StandardUnit.Bytes, dimensions, now),
         metricDatum("JvmHeapUsage", node.jvmHeapUsedPercent.toDouble, StandardUnit.Percent, dimensions, now))
     }
     val dataNodes = nodeStats.nodes.filter(_.isDataNode)
     val aggregatedDataNodeMetrics = if (dataNodes.nonEmpty) {
-      val minFreeDiskSpace = dataNodes.minBy(_.dataFree).dataFree
-      val sumFreeDiskSpace = dataNodes.map(_.dataFree).sum
+      val minAvailableDiskSpace = dataNodes.minBy(_.dataAvailable).dataAvailable
+      val sumAvailableDiskSpace = dataNodes.map(_.dataAvailable).sum
       val sumTotalDiskSpace = dataNodes.map(_.dataTotal).sum
       val maxJvmHeapUsage = dataNodes.maxBy(_.jvmHeapUsedPercent).jvmHeapUsedPercent
       List(
-        metricDatum("MinFreeDiskSpace", minFreeDiskSpace.toDouble, StandardUnit.Bytes, defaultDimensions, now),
-        metricDatum("SumFreeDiskSpace", sumFreeDiskSpace.toDouble, StandardUnit.Bytes, defaultDimensions, now),
+        metricDatum("MinAvailableDiskSpace", minAvailableDiskSpace.toDouble, StandardUnit.Bytes, defaultDimensions, now),
+        metricDatum("SumAvailableDiskSpace", sumAvailableDiskSpace.toDouble, StandardUnit.Bytes, defaultDimensions, now),
         metricDatum("SumTotalDiskSpace", sumTotalDiskSpace.toDouble, StandardUnit.Bytes, defaultDimensions, now),
         metricDatum("MaxJvmHeapUsage", maxJvmHeapUsage.toDouble, StandardUnit.Bytes, defaultDimensions, now))
     } else Nil

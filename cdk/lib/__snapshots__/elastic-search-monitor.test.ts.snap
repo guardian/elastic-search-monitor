@@ -214,7 +214,7 @@ Object {
           },
         ],
         "EvaluationPeriods": 2,
-        "MetricName": "MinFreeDiskSpace",
+        "MetricName": "MinAvailableDiskSpace",
         "Namespace": "deploy/elk",
         "Period": 60,
         "Statistic": "Minimum",

@@ -176,7 +176,7 @@ export class ElasticSearchMonitor extends GuStack {
       ...lessThanAlarmProps,
       alarmDescription: lowStorageDescription,
       evaluationPeriods: 2,
-      metric: metric("MinFreeDiskSpace"),
+      metric: metric("MinAvailableDiskSpace"),
       threshold: fifteenPercentDiskSpaceInBytes,
     });
   }
