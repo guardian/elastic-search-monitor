@@ -4,7 +4,7 @@ import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import { GuVpc } from "@guardian/cdk/lib/constructs/ec2";
 import type { App } from "aws-cdk-lib";
-import { CfnParameter, Duration } from "aws-cdk-lib";
+import { CfnParameter, Duration, Size } from "aws-cdk-lib";
 import { ComparisonOperator, Metric } from "aws-cdk-lib/aws-cloudwatch";
 import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import { Schedule } from "aws-cdk-lib/aws-events";
@@ -170,14 +170,18 @@ export class ElasticSearchMonitor extends GuStack {
     Double check the disk space used (curl -s 'localhost:9200/_cat/allocation?v') and access the logs to see if you can
     find any useful error messages ($ grep "ERROR" /var/log/syslog).`;
 
-    const fifteenPercentDiskSpaceInBytes = 743819616190;
+    // See: https://aws.amazon.com/ec2/instance-types/i3en/ and https://www.google.com/search?q=5000gb+in+gib&oq=5000gb+in+gib
+    const totalStorage = Size.gibibytes(4657);
+    const twentyPercentDiskSpaceInBytes = Math.round(
+      totalStorage.toBytes() * 0.2
+    );
 
     new GuAlarm(this, "DataNodeLowStorageAlarm", {
       ...lessThanAlarmProps,
       alarmDescription: lowStorageDescription,
       evaluationPeriods: 2,
       metric: metric("MinAvailableDiskSpace"),
-      threshold: fifteenPercentDiskSpaceInBytes,
+      threshold: twentyPercentDiskSpaceInBytes,
     });
   }
 }
