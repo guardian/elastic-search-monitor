@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The ElasticSearchMonitor stack matches the snapshot 1`] = `
-Object {
-  "Metadata": Object {
-    "gu:cdk:constructs": Array [
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
       "GuVpcParameter",
       "GuSubnetListParameter",
       "GuDistributionBucketParameter",
@@ -18,47 +18,47 @@ Object {
     ],
     "gu:cdk:version": "TEST",
   },
-  "Parameters": Object {
-    "ClusterSecurityGroup": Object {
+  "Parameters": {
+    "ClusterSecurityGroup": {
       "Description": "A security group allowing the lambda to connect to Elasticsearch on port 9200 over TCP",
       "Type": "AWS::EC2::SecurityGroup::Id",
     },
-    "DistributionBucketName": Object {
+    "DistributionBucketName": {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "PrivateSubnets": Object {
+    "PrivateSubnets": {
       "Default": "/account/vpc/primary/subnets/private",
       "Description": "A list of private subnets",
       "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
     },
-    "VpcId": Object {
+    "VpcId": {
       "Default": "/account/vpc/primary/id",
       "Description": "Virtual Private Cloud to run EC2 instances within. Should NOT be the account default VPC.",
       "Type": "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
     },
   },
-  "Resources": Object {
-    "ClusterStatusAlarm75657749": Object {
-      "Properties": Object {
+  "Resources": {
+    "ClusterStatusAlarm75657749": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":",
-                Object {
-                  "Fn::GetAtt": Array [
+                {
+                  "Fn::GetAtt": [
                     "ElkAlertChannel1915A337",
                     "TopicName",
                   ],
@@ -69,8 +69,8 @@ Object {
         ],
         "AlarmDescription": "Unexpected cluster status in TEST. See cloudwatch metric value for current cluster status (Green = 0, Yellow = 1, Red = 2). Runbook: https://docs.google.com/document/d/1PuEvL7L-CTV72Jx4OmiB3y5hlMmJR7Xz-YxYWAMiGdY",
         "ComparisonOperator": "GreaterThanThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "Cluster",
             "Value": "elk",
           },
@@ -80,20 +80,20 @@ Object {
         "Namespace": "deploy/elk",
         "Period": 60,
         "Statistic": "Maximum",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/elastic-search-monitor",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "deploy",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -102,25 +102,25 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "DataNodeCountAlarm0ECE9147": Object {
-      "Properties": Object {
+    "DataNodeCountAlarm0ECE9147": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":",
-                Object {
-                  "Fn::GetAtt": Array [
+                {
+                  "Fn::GetAtt": [
                     "ElkAlertChannel1915A337",
                     "TopicName",
                   ],
@@ -131,8 +131,8 @@ Object {
         ],
         "AlarmDescription": "Unexpected count of data nodes in TEST. Runbook: https://docs.google.com/document/d/1PuEvL7L-CTV72Jx4OmiB3y5hlMmJR7Xz-YxYWAMiGdY",
         "ComparisonOperator": "LessThanThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "Cluster",
             "Value": "elk",
           },
@@ -142,20 +142,20 @@ Object {
         "Namespace": "deploy/elk",
         "Period": 60,
         "Statistic": "Minimum",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/elastic-search-monitor",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "deploy",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -164,25 +164,25 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "DataNodeJvmHeapUsageAlarmDECB3926": Object {
-      "Properties": Object {
+    "DataNodeJvmHeapUsageAlarmDECB3926": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":",
-                Object {
-                  "Fn::GetAtt": Array [
+                {
+                  "Fn::GetAtt": [
                     "ElkAlertChannel1915A337",
                     "TopicName",
                   ],
@@ -193,8 +193,8 @@ Object {
         ],
         "AlarmDescription": "A data node is using too much of its heap in TEST",
         "ComparisonOperator": "GreaterThanThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "Cluster",
             "Value": "elk",
           },
@@ -204,20 +204,20 @@ Object {
         "Namespace": "deploy/elk",
         "Period": 60,
         "Statistic": "Maximum",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/elastic-search-monitor",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "deploy",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -226,25 +226,25 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "DataNodeLowStorageAlarm72D42DBD": Object {
-      "Properties": Object {
+    "DataNodeLowStorageAlarm72D42DBD": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":",
-                Object {
-                  "Fn::GetAtt": Array [
+                {
+                  "Fn::GetAtt": [
                     "ElkAlertChannel1915A337",
                     "TopicName",
                   ],
@@ -261,8 +261,8 @@ Object {
     Double check the disk space used (curl -s 'localhost:9200/_cat/allocation?v') and access the logs to see if you can
     find any useful error messages ($ grep "ERROR" /var/log/syslog).",
         "ComparisonOperator": "LessThanThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "Cluster",
             "Value": "elk",
           },
@@ -272,20 +272,20 @@ Object {
         "Namespace": "deploy/elk",
         "Period": 60,
         "Statistic": "Minimum",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/elastic-search-monitor",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "deploy",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -294,23 +294,23 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "ElkAlertChannel1915A337": Object {
-      "Properties": Object {
+    "ElkAlertChannel1915A337": {
+      "Properties": {
         "DisplayName": "ELK alert channel for TEST",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/elastic-search-monitor",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "deploy",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -319,35 +319,35 @@ Object {
       },
       "Type": "AWS::SNS::Topic",
     },
-    "ElkAlertChanneldevxsecopsguardiancouk276AF53D": Object {
-      "Properties": Object {
+    "ElkAlertChanneldevxsecopsguardiancouk276AF53D": {
+      "Properties": {
         "Endpoint": "devx.sec.ops@guardian.co.uk",
         "Protocol": "email",
-        "TopicArn": Object {
+        "TopicArn": {
           "Ref": "ElkAlertChannel1915A337",
         },
       },
       "Type": "AWS::SNS::Subscription",
     },
-    "MasterNodeCountAlarmFE01B272": Object {
-      "Properties": Object {
+    "MasterNodeCountAlarmFE01B272": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":",
-                Object {
-                  "Fn::GetAtt": Array [
+                {
+                  "Fn::GetAtt": [
                     "ElkAlertChannel1915A337",
                     "TopicName",
                   ],
@@ -358,8 +358,8 @@ Object {
         ],
         "AlarmDescription": "Unexpected count of master nodes in TEST. Runbook: https://docs.google.com/document/d/1PuEvL7L-CTV72Jx4OmiB3y5hlMmJR7Xz-YxYWAMiGdY",
         "ComparisonOperator": "LessThanThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "Cluster",
             "Value": "elk",
           },
@@ -369,20 +369,20 @@ Object {
         "Namespace": "deploy/elk",
         "Period": 60,
         "Statistic": "Minimum",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/elastic-search-monitor",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "deploy",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -391,25 +391,25 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "RedClusterStatusAlarm42644991": Object {
-      "Properties": Object {
+    "RedClusterStatusAlarm42644991": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":",
-                Object {
-                  "Fn::GetAtt": Array [
+                {
+                  "Fn::GetAtt": [
                     "ElkAlertChannel1915A337",
                     "TopicName",
                   ],
@@ -420,8 +420,8 @@ Object {
         ],
         "AlarmDescription": "Red cluster status in TEST. See cloudwatch metric value for current cluster status (Green = 0, Yellow = 1, Red = 2). Runbook: https://docs.google.com/document/d/1PuEvL7L-CTV72Jx4OmiB3y5hlMmJR7Xz-YxYWAMiGdY",
         "ComparisonOperator": "GreaterThanThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "Cluster",
             "Value": "elk",
           },
@@ -431,20 +431,20 @@ Object {
         "Namespace": "deploy/elk",
         "Period": 60,
         "Statistic": "Maximum",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/elastic-search-monitor",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "deploy",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -453,21 +453,21 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "ScheduledLambda68819433": Object {
-      "DependsOn": Array [
+    "ScheduledLambda68819433": {
+      "DependsOn": [
         "ScheduledLambdaServiceRoleDefaultPolicy790AF47E",
         "ScheduledLambdaServiceRoleC946C6E8",
       ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": Object {
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
           "S3Key": "deploy/TEST/elastic-search-monitor/elastic-search-monitor.jar",
         },
         "Description": "Monitors your Elasticsearch cluster and reports metrics to CloudWatch",
-        "Environment": Object {
-          "Variables": Object {
+        "Environment": {
+          "Variables": {
             "APP": "elastic-search-monitor",
             "CLUSTER_NAME": "elk",
             "STACK": "deploy",
@@ -477,67 +477,67 @@ Object {
           },
         },
         "Handler": "com.gu.elasticsearchmonitor.Lambda::handler",
-        "LoggingConfig": Object {
+        "LoggingConfig": {
           "LogFormat": "JSON",
         },
         "MemorySize": 1024,
-        "Role": Object {
-          "Fn::GetAtt": Array [
+        "Role": {
+          "Fn::GetAtt": [
             "ScheduledLambdaServiceRoleC946C6E8",
             "Arn",
           ],
         },
         "Runtime": "java11",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "elastic-search-monitor",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/elastic-search-monitor",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "deploy",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
         ],
         "Timeout": 30,
-        "VpcConfig": Object {
-          "SecurityGroupIds": Array [
-            Object {
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
               "Ref": "ClusterSecurityGroup",
             },
           ],
-          "SubnetIds": Object {
+          "SubnetIds": {
             "Ref": "PrivateSubnets",
           },
         },
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ScheduledLambdaErrorPercentageAlarmForLambda6F1E8BCD": Object {
-      "Properties": Object {
+    "ScheduledLambdaErrorPercentageAlarmForLambda6F1E8BCD": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":devx-alerts",
@@ -545,23 +545,23 @@ Object {
             ],
           },
         ],
-        "AlarmDescription": Object {
-          "Fn::Join": Array [
+        "AlarmDescription": {
+          "Fn::Join": [
             "",
-            Array [
-              Object {
+            [
+              {
                 "Ref": "ScheduledLambda68819433",
               },
               " exceeded 99% error rate",
             ],
           ],
         },
-        "AlarmName": Object {
-          "Fn::Join": Array [
+        "AlarmName": {
+          "Fn::Join": [
             "",
-            Array [
+            [
               "High error percentage from ",
-              Object {
+              {
                 "Ref": "ScheduledLambda68819433",
               },
               " lambda in TEST",
@@ -570,30 +570,30 @@ Object {
         },
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 30,
-        "Metrics": Array [
-          Object {
+        "Metrics": [
+          {
             "Expression": "100*m1/m2",
             "Id": "expr_1",
-            "Label": Object {
-              "Fn::Join": Array [
+            "Label": {
+              "Fn::Join": [
                 "",
-                Array [
+                [
                   "Error % of ",
-                  Object {
+                  {
                     "Ref": "ScheduledLambda68819433",
                   },
                 ],
               ],
             },
           },
-          Object {
+          {
             "Id": "m1",
-            "MetricStat": Object {
-              "Metric": Object {
-                "Dimensions": Array [
-                  Object {
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
                     "Name": "FunctionName",
-                    "Value": Object {
+                    "Value": {
                       "Ref": "ScheduledLambda68819433",
                     },
                   },
@@ -606,14 +606,14 @@ Object {
             },
             "ReturnData": false,
           },
-          Object {
+          {
             "Id": "m2",
-            "MetricStat": Object {
-              "Metric": Object {
-                "Dimensions": Array [
-                  Object {
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
                     "Name": "FunctionName",
-                    "Value": Object {
+                    "Value": {
                       "Ref": "ScheduledLambda68819433",
                     },
                   },
@@ -627,20 +627,20 @@ Object {
             "ReturnData": false,
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/elastic-search-monitor",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "deploy",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -650,14 +650,14 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "ScheduledLambdaScheduledLambdarate1minute0064C7EC4": Object {
-      "Properties": Object {
+    "ScheduledLambdaScheduledLambdarate1minute0064C7EC4": {
+      "Properties": {
         "ScheduleExpression": "rate(1 minute)",
         "State": "ENABLED",
-        "Targets": Array [
-          Object {
-            "Arn": Object {
-              "Fn::GetAtt": Array [
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
                 "ScheduledLambda68819433",
                 "Arn",
               ],
@@ -668,18 +668,18 @@ Object {
       },
       "Type": "AWS::Events::Rule",
     },
-    "ScheduledLambdaScheduledLambdarate1minute0AllowEventRuleElasticSearchMonitorScheduledLambdaDFD7F6B32CFE3E7A": Object {
-      "Properties": Object {
+    "ScheduledLambdaScheduledLambdarate1minute0AllowEventRuleElasticSearchMonitorScheduledLambdaDFD7F6B32CFE3E7A": {
+      "Properties": {
         "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
+        "FunctionName": {
+          "Fn::GetAtt": [
             "ScheduledLambda68819433",
             "Arn",
           ],
         },
         "Principal": "events.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::GetAtt": Array [
+        "SourceArn": {
+          "Fn::GetAtt": [
             "ScheduledLambdaScheduledLambdarate1minute0064C7EC4",
             "Arn",
           ],
@@ -687,39 +687,39 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ScheduledLambdaServiceRoleC946C6E8": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "ScheduledLambdaServiceRoleC946C6E8": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "lambda.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:",
-                Object {
+                {
                   "Ref": "AWS::Partition",
                 },
                 ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
               ],
             ],
           },
-          Object {
-            "Fn::Join": Array [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:",
-                Object {
+                {
                   "Ref": "AWS::Partition",
                 },
                 ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole",
@@ -727,24 +727,24 @@ Object {
             ],
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "elastic-search-monitor",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/elastic-search-monitor",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "deploy",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -752,43 +752,43 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "ScheduledLambdaServiceRoleDefaultPolicy790AF47E": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "ScheduledLambdaServiceRoleDefaultPolicy790AF47E": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "s3:GetObject*",
                 "s3:GetBucket*",
                 "s3:List*",
               ],
               "Effect": "Allow",
-              "Resource": Array [
-                Object {
-                  "Fn::Join": Array [
+              "Resource": [
+                {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "arn:",
-                      Object {
+                      {
                         "Ref": "AWS::Partition",
                       },
                       ":s3:::",
-                      Object {
+                      {
                         "Ref": "DistributionBucketName",
                       },
                     ],
                   ],
                 },
-                Object {
-                  "Fn::Join": Array [
+                {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "arn:",
-                      Object {
+                      {
                         "Ref": "AWS::Partition",
                       },
                       ":s3:::",
-                      Object {
+                      {
                         "Ref": "DistributionBucketName",
                       },
                       "/deploy/TEST/elastic-search-monitor/elastic-search-monitor.jar",
@@ -797,19 +797,19 @@ Object {
                 },
               ],
             },
-            Object {
+            {
               "Action": "ssm:GetParametersByPath",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/deploy/elastic-search-monitor",
@@ -817,22 +817,22 @@ Object {
                 ],
               },
             },
-            Object {
-              "Action": Array [
+            {
+              "Action": [
                 "ssm:GetParameters",
                 "ssm:GetParameter",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/deploy/elastic-search-monitor/*",
@@ -840,8 +840,8 @@ Object {
                 ],
               },
             },
-            Object {
-              "Action": Array [
+            {
+              "Action": [
                 "ec2:CreateNetworkInterface",
                 "ec2:DescribeNetworkInterfaces",
                 "ec2:DeleteNetworkInterface",
@@ -849,12 +849,12 @@ Object {
               "Effect": "Allow",
               "Resource": "*",
             },
-            Object {
+            {
               "Action": "ec2:DescribeInstances",
               "Effect": "Allow",
               "Resource": "*",
             },
-            Object {
+            {
               "Action": "cloudwatch:PutMetricData",
               "Effect": "Allow",
               "Resource": "*",
@@ -863,8 +863,8 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "ScheduledLambdaServiceRoleDefaultPolicy790AF47E",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "ScheduledLambdaServiceRoleC946C6E8",
           },
         ],

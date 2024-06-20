@@ -39,10 +39,7 @@
     },
     "setupFilesAfterEnv": [
       "./jest.setup.js"
-    ],
-    "snapshotFormat": {
-      "printBasicPrototype": true
-    }
+    ]
   },
   "eslintConfig": {
     "root": true,
