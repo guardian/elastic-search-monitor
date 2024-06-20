@@ -5,14 +5,17 @@ on:
     branches: ["main"]
   pull_request:
   workflow_dispatch:
-  
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    permissions: # required by aws-actions/configure-aws-credentials
-      id-token: write
+    permissions:
       contents: read
+
+      # required by guardian/actions-riff-raff
+      id-token: write
+      pull-requests: write
 
     steps:
     - uses: actions/checkout@v3
@@ -35,12 +38,6 @@ jobs:
         yarn test
         yarn synth
 
-    - name: AWS Auth
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
-        aws-region: eu-west-1
-
     - name: Build and Test project, Assemble jar, copy to root dir
       run: |
         sbt clean compile test assembly
@@ -49,6 +46,8 @@ jobs:
     - name: Upload to riff-raff
       uses: guardian/actions-riff-raff@v4
       with:
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
         configPath: cdk/cdk.out/riff-raff.yaml
         projectName: elastic-search-monitor
         buildNumberOffset: 99
