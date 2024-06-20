@@ -19,13 +19,13 @@ export class ElasticSearchMonitor extends GuStack {
   constructor(scope: App, id: string, props: GuStackProps) {
     super(scope, id, props);
     const clusterSecurityGroupId = new CfnParameter(
-      this,
-      "ClusterSecurityGroup",
-      {
-        type: "AWS::EC2::SecurityGroup::Id",
-        description:
-          "A security group allowing the lambda to connect to Elasticsearch on port 9200 over TCP",
-      }
+     this,
+     "ClusterSecurityGroup",
+     {
+       type: "AWS::EC2::SecurityGroup::Id",
+       description:
+        "A security group allowing the lambda to connect to Elasticsearch on port 9200 over TCP",
+     }
     );
     const networkInterfacePolicy = new PolicyStatement({
       actions: [
@@ -57,7 +57,7 @@ export class ElasticSearchMonitor extends GuStack {
         CLUSTER_NAME: "elk",
       },
       description:
-        "Monitors your Elasticsearch cluster and reports metrics to CloudWatch",
+       "Monitors your Elasticsearch cluster and reports metrics to CloudWatch",
       handler: "com.gu.elasticsearchmonitor.Lambda::handler",
       monitoringConfiguration: {
         toleratedErrorPercentage: 99,
@@ -73,9 +73,9 @@ export class ElasticSearchMonitor extends GuStack {
       },
       securityGroups: [
         SecurityGroup.fromSecurityGroupId(
-          this,
-          "ElasticsearchClusterSecurityGroup",
-          clusterSecurityGroupId.valueAsString
+         this,
+         "ElasticsearchClusterSecurityGroup",
+         clusterSecurityGroupId.valueAsString
         ),
       ],
     });
@@ -87,7 +87,7 @@ export class ElasticSearchMonitor extends GuStack {
     });
 
     topicForElasticsearchAlerts.addSubscription(
-      new EmailSubscription("devx.sec.ops@guardian.co.uk")
+     new EmailSubscription("devx.sec.ops@guardian.co.uk")
     );
 
     const clusterName = "elk";
@@ -173,7 +173,7 @@ export class ElasticSearchMonitor extends GuStack {
     // See: https://aws.amazon.com/ec2/instance-types/i3en/ and https://www.google.com/search?q=5000gb+in+gib&oq=5000gb+in+gib
     const totalStorage = Size.gibibytes(4657);
     const twentyPercentDiskSpaceInBytes = Math.round(
-      totalStorage.toBytes() * 0.2
+     totalStorage.toBytes() * 0.2
     );
 
     new GuAlarm(this, "DataNodeLowStorageAlarm", {

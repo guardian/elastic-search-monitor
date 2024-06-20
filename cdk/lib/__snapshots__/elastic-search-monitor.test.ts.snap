@@ -80,6 +80,24 @@ Object {
         "Namespace": "deploy/elk",
         "Period": 60,
         "Statistic": "Maximum",
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/elastic-search-monitor",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "deploy",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
         "Threshold": 0,
       },
       "Type": "AWS::CloudWatch::Alarm",
@@ -124,6 +142,24 @@ Object {
         "Namespace": "deploy/elk",
         "Period": 60,
         "Statistic": "Minimum",
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/elastic-search-monitor",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "deploy",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
         "Threshold": 3,
       },
       "Type": "AWS::CloudWatch::Alarm",
@@ -168,6 +204,24 @@ Object {
         "Namespace": "deploy/elk",
         "Period": 60,
         "Statistic": "Maximum",
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/elastic-search-monitor",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "deploy",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
         "Threshold": 85,
       },
       "Type": "AWS::CloudWatch::Alarm",
@@ -203,9 +257,9 @@ Object {
     (this is considered a low disk watermark: https://www.datadoghq.com/blog/elasticsearch-unassigned-shards/#reason-5-low-disk-watermark).
     In order to troubleshoot this, follow the instructions on this Trello card: https://trello.com/c/68Bi7pwB.
     Or, if you can't access that you can do the following: Find the id of the instance that is experiencing problems by
-    checking https://logs.gutools.co.uk/cerebro. SSH onto the instance ($ ssm ssh -i \\"instance-id\\" -p deployTools).
+    checking https://logs.gutools.co.uk/cerebro. SSH onto the instance ($ ssm ssh -i "instance-id" -p deployTools).
     Double check the disk space used (curl -s 'localhost:9200/_cat/allocation?v') and access the logs to see if you can
-    find any useful error messages ($ grep \\"ERROR\\" /var/log/syslog).",
+    find any useful error messages ($ grep "ERROR" /var/log/syslog).",
         "ComparisonOperator": "LessThanThreshold",
         "Dimensions": Array [
           Object {
@@ -218,6 +272,24 @@ Object {
         "Namespace": "deploy/elk",
         "Period": 60,
         "Statistic": "Minimum",
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/elastic-search-monitor",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "deploy",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
         "Threshold": 1000083134874,
       },
       "Type": "AWS::CloudWatch::Alarm",
@@ -297,6 +369,24 @@ Object {
         "Namespace": "deploy/elk",
         "Period": 60,
         "Statistic": "Minimum",
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/elastic-search-monitor",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "deploy",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
         "Threshold": 3,
       },
       "Type": "AWS::CloudWatch::Alarm",
@@ -341,6 +431,24 @@ Object {
         "Namespace": "deploy/elk",
         "Period": 60,
         "Statistic": "Maximum",
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/elastic-search-monitor",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "deploy",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
         "Threshold": 1,
       },
       "Type": "AWS::CloudWatch::Alarm",
@@ -517,6 +625,24 @@ Object {
               "Stat": "Sum",
             },
             "ReturnData": false,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/elastic-search-monitor",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "deploy",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
           },
         ],
         "Threshold": 99,
