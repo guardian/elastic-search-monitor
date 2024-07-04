@@ -162,13 +162,9 @@ export class ElasticSearchMonitor extends GuStack {
       threshold: 85,
     });
 
-    const lowStorageDescription = `A data node is running on less than 85% disk space
-    (this is considered a low disk watermark: https://www.datadoghq.com/blog/elasticsearch-unassigned-shards/#reason-5-low-disk-watermark).
-    In order to troubleshoot this, follow the instructions on this Trello card: https://trello.com/c/68Bi7pwB.
-    Or, if you can't access that you can do the following: Find the id of the instance that is experiencing problems by
-    checking https://logs.gutools.co.uk/cerebro. SSH onto the instance ($ ssm ssh -i "instance-id" -p deployTools).
-    Double check the disk space used (curl -s 'localhost:9200/_cat/allocation?v') and access the logs to see if you can
-    find any useful error messages ($ grep "ERROR" /var/log/syslog).`;
+    const lowStorageDescription = `A data node is running on less than 80% disk space.
+    For more context and troubleshooting instructions, see the runbook:
+    https://docs.google.com/document/d/1PuEvL7L-CTV72Jx4OmiB3y5hlMmJR7Xz-YxYWAMiGdY/edit#heading=h.8h00c65wqmv0`;
 
     // See: https://aws.amazon.com/ec2/instance-types/i3en/ and https://www.google.com/search?q=5000gb+in+gib&oq=5000gb+in+gib
     const totalStorage = Size.gibibytes(4657);
