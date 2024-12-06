@@ -33,10 +33,10 @@ jobs:
     - name: CI
       working-directory: cdk
       run: |
-        yarn install --frozen-lockfile
-        yarn lint
-        yarn test
-        yarn synth
+        npm ci
+        npm run lint
+        npm test
+        npm run synth
 
     - name: Build and Test project, Assemble jar, copy to root dir
       run: |
