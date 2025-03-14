@@ -160,7 +160,7 @@ exports[`The ElasticSearchMonitor stack matches the snapshot 1`] = `
             "Value": "TEST",
           },
         ],
-        "Threshold": 4,
+        "Threshold": 5,
       },
       "Type": "AWS::CloudWatch::Alarm",
     },

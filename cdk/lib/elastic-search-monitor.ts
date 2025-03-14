@@ -125,7 +125,7 @@ export class ElasticSearchMonitor extends GuStack {
       alarmDescription: `Unexpected count of data nodes in ${this.stage}. Runbook: https://docs.google.com/document/d/1PuEvL7L-CTV72Jx4OmiB3y5hlMmJR7Xz-YxYWAMiGdY`,
       evaluationPeriods: 2,
       metric: metric("NumberOfDataNodes"),
-      threshold: 4,
+      threshold: 5,
     });
 
     new GuAlarm(this, "MasterNodeCountAlarm", {
