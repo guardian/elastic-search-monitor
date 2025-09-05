@@ -8,7 +8,7 @@ version := "1.0"
 
 scalaVersion := "3.3.6"
 
-val awsSdkVersion = "1.12.788"
+val awsSdkVersion = "1.12.789"
 
 scalacOptions ++= Seq(
   "-deprecation",
@@ -16,7 +16,7 @@ scalacOptions ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "com.amazonaws" % "aws-lambda-java-core" % "1.3.0",
+  "com.amazonaws" % "aws-lambda-java-core" % "1.4.0",
   "com.squareup.okhttp3" % "okhttp" % "4.12.0",
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsSdkVersion,
   "com.amazonaws" % "aws-java-sdk-ec2" % awsSdkVersion,
