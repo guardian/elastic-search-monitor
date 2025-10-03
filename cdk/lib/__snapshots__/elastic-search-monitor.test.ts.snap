@@ -651,6 +651,28 @@ exports[`The ElasticSearchMonitor stack matches the snapshot 1`] = `
       "Properties": {
         "ScheduleExpression": "rate(1 minute)",
         "State": "ENABLED",
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "elastic-search-monitor",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/elastic-search-monitor",
+          },
+          {
+            "Key": "Stack",
+            "Value": "deploy",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
         "Targets": [
           {
             "Arn": {
