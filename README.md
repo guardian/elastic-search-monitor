@@ -8,8 +8,10 @@ Monitors your Elasticsearch cluster and reports metrics to CloudWatch.
 * Export the following variables, adapting them for your account (this is for Deploy Tools)
 
 ```bash
-export TagQueryApp="elk-es-master"
-export TagQueryStack="deploy"
-export ClusterName="elk"
+export TAG_QUERY_APP="elk-es-master"
+export TAG_QUERY_STACK="deploy"
+export CLUSTER_NAME="elk"
 ```
-* Then run it by using `sbt run`
+
+* Run `python3 -m http.server 8000 --directory test-data` to serve static test data
+* Then run the code by using `sbt run`
