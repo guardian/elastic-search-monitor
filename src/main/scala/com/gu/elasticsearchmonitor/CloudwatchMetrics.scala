@@ -49,7 +49,7 @@ class CloudwatchMetrics(env: Env, cloudWatch: CloudWatchClient) {
       List(
         metricDatum("AvailableDiskSpace", node.dataAvailable.toDouble, StandardUnit.BYTES, dimensions, now),
         metricDatum("TotalDiskSpace", node.dataTotal.toDouble, StandardUnit.BYTES, dimensions, now),
-        metricDatum("JvmHeapUsage", node.jvmHeapUsedPercent.toDouble, StandardUnit.BYTES, dimensions, now))
+        metricDatum("JvmHeapUsage", node.jvmHeapUsedPercent.toDouble, StandardUnit.PERCENT, dimensions, now))
     }
     val dataNodes = nodeStats.nodes.filter(_.isDataNode)
     val aggregatedDataNodeMetrics = if (dataNodes.nonEmpty) {
