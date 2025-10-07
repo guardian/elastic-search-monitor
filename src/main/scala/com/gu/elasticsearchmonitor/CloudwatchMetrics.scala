@@ -61,7 +61,7 @@ class CloudwatchMetrics(env: Env, cloudWatch: CloudWatchClient) {
         metricDatum("MinAvailableDiskSpace", minAvailableDiskSpace.toDouble, StandardUnit.BYTES, defaultDimensions, now),
         metricDatum("SumAvailableDiskSpace", sumAvailableDiskSpace.toDouble, StandardUnit.BYTES, defaultDimensions, now),
         metricDatum("SumTotalDiskSpace", sumTotalDiskSpace.toDouble, StandardUnit.BYTES, defaultDimensions, now),
-        metricDatum("MaxJvmHeapUsage", maxJvmHeapUsage.toDouble, StandardUnit.BYTES, defaultDimensions, now))
+        metricDatum("MaxJvmHeapUsage", maxJvmHeapUsage.toDouble, StandardUnit.PERCENT, defaultDimensions, now))
     } else Nil
     clusterMetrics ++ nodeMetrics ++ aggregatedDataNodeMetrics
   }
