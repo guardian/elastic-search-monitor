@@ -1,13 +1,13 @@
 package com.gu.elasticsearchmonitor
 
+import com.amazonaws.auth.profile.ProfileCredentialsProvider
+import com.amazonaws.auth.{AWSCredentialsProviderChain, DefaultAWSCredentialsProviderChain}
+import com.amazonaws.services.cloudwatch.{AmazonCloudWatch, AmazonCloudWatchClient}
+import com.amazonaws.services.ec2.{AmazonEC2, AmazonEC2Client}
 import com.amazonaws.services.lambda.runtime.logging.LogLevel
 import com.amazonaws.services.lambda.runtime.{Context, LambdaLogger}
 import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.OkHttpClient
-import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider
-import software.amazon.awssdk.regions.Region
-import software.amazon.awssdk.services.cloudwatch.CloudWatchClient
-import software.amazon.awssdk.services.ec2.Ec2Client
 
 import scala.util.{Failure, Success, Try}
 
@@ -46,19 +46,19 @@ object Lambda {
   val httpClient = OkHttpClient()
 
   val mapper = ObjectMapper()
-  
-  val credentials = DefaultCredentialsProvider.builder
-    .profileName("deployTools")
-    .build()
 
-  val cloudwatch: CloudWatchClient = CloudWatchClient.builder()
-    .credentialsProvider(credentials)
-    .region(Region.EU_WEST_1)
+  val credentials = AWSCredentialsProviderChain(
+    ProfileCredentialsProvider("deployTools"),
+    DefaultAWSCredentialsProviderChain.getInstance)
+
+  val cloudwatch: AmazonCloudWatch = AmazonCloudWatchClient.builder()
+    .withCredentials(credentials)
+    .withRegion("eu-west-1")
     .build
 
-  val ec2: Ec2Client = Ec2Client.builder()
-    .credentialsProvider(credentials)
-    .region(Region.EU_WEST_1)
+  val ec2: AmazonEC2 = AmazonEC2Client.builder()
+    .withCredentials(credentials)
+    .withRegion("eu-west-1")
     .build
 
   val cloudwatchMetrics = CloudwatchMetrics(Env(), cloudwatch)
