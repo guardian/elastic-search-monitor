@@ -42,6 +42,7 @@ jobs:
     - name: Upload to riff-raff
       uses: guardian/actions-riff-raff@v4
       with:
+        commentingEnabled: false
         githubToken: ${{ secrets.GITHUB_TOKEN }}
         roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
         configPath: cdk/cdk.out/riff-raff.yaml
