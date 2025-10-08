@@ -66,7 +66,7 @@ export class ElasticSearchMonitor extends GuStack {
       },
       rules: [{ schedule: Schedule.rate(Duration.minutes(1)) }],
       runtime: Runtime.JAVA_11,
-      // This lambda needs access to the Deploy Tools VPC so that it can talk to Prism
+      // This lambda needs access to the Deploy Tools VPC so that it can talk to the ELK stack
       vpc: GuVpc.fromIdParameter(this, "vpc"),
       vpcSubnets: {
         subnets: GuVpc.subnetsFromParameter(this),
