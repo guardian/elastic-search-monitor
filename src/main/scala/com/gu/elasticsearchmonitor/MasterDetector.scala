@@ -1,32 +1,27 @@
 package com.gu.elasticsearchmonitor
 
-import com.amazonaws.services.ec2.AmazonEC2
-import com.amazonaws.services.ec2.model.{ DescribeInstancesRequest, Filter, Instance }
 import com.amazonaws.services.lambda.runtime.LambdaLogger
 import com.amazonaws.services.lambda.runtime.logging.LogLevel
 import okhttp3.{ OkHttpClient, Request }
+import software.amazon.awssdk.services.ec2.Ec2Client
+import software.amazon.awssdk.services.ec2.model.{ DescribeInstancesRequest, Filter, Instance }
 
 import scala.jdk.CollectionConverters.*
-import scala.annotation.tailrec
 import scala.util.{ Failure, Random, Success, Try }
 
-class MasterDetector(amazonEC2: AmazonEC2, httpClient: OkHttpClient) {
+class MasterDetector(amazonEC2: Ec2Client, httpClient: OkHttpClient) {
 
   def detectMasters(env: Env, logger: LambdaLogger): Either[String, MasterInformation] = {
-    @tailrec
     def queryInstances(instancesFromPreviousRequest: List[Instance], nextToken: Option[String]): List[Instance] = {
       val filters = List(
-        Filter("tag:Stage", List(env.stage).asJava),
-        Filter("tag:Stack", List(env.tagQueryStack).asJava),
-        Filter("tag:App", List(env.tagQueryApp).asJava))
-      val dir = DescribeInstancesRequest().withFilters(filters: _*).withNextToken(nextToken.orNull)
-      val result = amazonEC2.describeInstances(dir)
-      val instances = instancesFromPreviousRequest ++ result.getReservations.asScala.flatMap(_.getInstances.asScala)
-      if (result.getNextToken == null) {
-        instances
-      } else {
-        queryInstances(instances, Option(result.getNextToken))
-      }
+        Filter.builder().name("tag:Stage").values(List(env.stage).asJava).build(),
+        Filter.builder().name("tag:Stack").values(List(env.tagQueryStack).asJava).build(),
+        Filter.builder().name("tag:App").values(List(env.tagQueryApp).asJava).build())
+      val instancesRequest = DescribeInstancesRequest.builder()
+        .filters(filters.asJava)
+        .build()
+      val paginator = amazonEC2.describeInstancesPaginator(instancesRequest)
+      paginator.asScala.toList.flatMap(_.reservations.asScala.toList.flatMap(_.instances.asScala))
     }
 
     def masterRespondsToHealthCheck(instanceName: String): Boolean = {
@@ -45,7 +40,7 @@ class MasterDetector(amazonEC2: AmazonEC2, httpClient: OkHttpClient) {
 
     Try(queryInstances(Nil, None)) match {
       case Success(instances) =>
-        val instanceNames = instances.map(instance => s"http://${instance.getPrivateIpAddress}:9200")
+        val instanceNames = instances.map(instance => s"http://${instance.privateIpAddress}:9200")
         logger.log(s"Identified these instances as potential candidates: $instanceNames", LogLevel.INFO)
         val aliveInstances = instanceNames.filter(masterRespondsToHealthCheck)
 
