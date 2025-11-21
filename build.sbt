@@ -17,7 +17,7 @@ scalacOptions ++= Seq(
 
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-core" % "1.4.0",
-  "com.squareup.okhttp3" % "okhttp" % "4.12.0",
+  "com.squareup.okhttp3" % "okhttp" % "5.3.2",
   "software.amazon.awssdk" % "cloudwatch" % awsSdkVersion,
   "software.amazon.awssdk" % "ec2" % awsSdkVersion,
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.19.4",
