@@ -483,7 +483,7 @@ exports[`The ElasticSearchMonitor stack matches the snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "java11",
+        "Runtime": "java21",
         "Tags": [
           {
             "Key": "App",
