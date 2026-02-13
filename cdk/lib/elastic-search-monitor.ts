@@ -65,7 +65,7 @@ export class ElasticSearchMonitor extends GuStack {
         snsTopicName: "devx-alerts",
       },
       rules: [{ schedule: Schedule.rate(Duration.minutes(1)) }],
-      runtime: Runtime.JAVA_11,
+      runtime: Runtime.JAVA_21,
       // This lambda needs access to the Deploy Tools VPC so that it can talk to the ELK stack
       vpc: GuVpc.fromIdParameter(this, "vpc"),
       vpcSubnets: {
