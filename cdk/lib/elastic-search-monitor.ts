@@ -162,22 +162,30 @@ export class ElasticSearchMonitor extends GuStack {
       threshold: 85,
     });
 
-    const lowStorageDescription = `A data node is running on less than 80% disk space.
+    const lowStorageDescription = `A data node is running out of disk space.
     For more context and troubleshooting instructions, see the runbook:
     https://docs.google.com/document/d/1PuEvL7L-CTV72Jx4OmiB3y5hlMmJR7Xz-YxYWAMiGdY/edit#heading=h.8h00c65wqmv0`;
 
-    // See: https://aws.amazon.com/ec2/instance-types/i3en/ and https://www.google.com/search?q=5000gb+in+gib&oq=5000gb+in+gib
-    const totalStorage = Size.gibibytes(4657);
-    const twentyPercentDiskSpaceInBytes = Math.round(
-     totalStorage.toBytes() * 0.2
-    );
+    /*
+    When a data node is using too much storage it stops accepting new shards. In the past we have seen the cluster sit
+    in yellow status for a long time when data nodes have reached this 'low watermark' state.
+
+    The threshold for this state is determined by a combination of 2 settings:
+    https://www.elastic.co/docs/reference/elasticsearch/configuration-reference/cluster-level-shard-allocation-routing-settings#disk-based-shard-allocation
+
+    At the time of writing we use instances with a very large amount of disk space, so the important setting is
+    `cluster.routing.allocation.disk.watermark.low.max_headroom`, which defaults to 200GB (we use the defaults).
+
+    We set the threshold at 400GiB here so that we have a bit of warning before the low watermark is reached.
+    */
+    const fourHundredGbInBytes = Size.gibibytes(400).toBytes();
 
     new GuAlarm(this, "DataNodeLowStorageAlarm", {
       ...lessThanAlarmProps,
       alarmDescription: lowStorageDescription,
       evaluationPeriods: 2,
       metric: metric("MinAvailableDiskSpace"),
-      threshold: twentyPercentDiskSpaceInBytes,
+      threshold: fourHundredGbInBytes,
     });
   }
 }
