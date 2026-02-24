@@ -87,7 +87,11 @@ class CloudwatchMetrics(env: Env, cloudWatch: CloudWatchClient) {
         .metricData(batch.asJava)
         .build()
 
-      cloudWatch.putMetricData(putMetricDataRequest)
+      if (env.stage == "DEV") {
+        logger.log(s"Skipping CloudWatch publish (DEV mode). Metrics: ${batch.map(m => s"${m.metricName}=${m.value}").mkString(", ")}", LogLevel.INFO)
+      } else {
+        cloudWatch.putMetricData(putMetricDataRequest)
+      }
     }
   }
 
