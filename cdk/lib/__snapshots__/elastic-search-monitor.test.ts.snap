@@ -56,13 +56,7 @@ exports[`The ElasticSearchMonitor stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":",
-                {
-                  "Fn::GetAtt": [
-                    "ElkAlertChannel1915A337",
-                    "TopicName",
-                  ],
-                },
+                ":devx-reliabilityandoperations",
               ],
             ],
           },
@@ -118,13 +112,7 @@ exports[`The ElasticSearchMonitor stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":",
-                {
-                  "Fn::GetAtt": [
-                    "ElkAlertChannel1915A337",
-                    "TopicName",
-                  ],
-                },
+                ":devx-reliabilityandoperations",
               ],
             ],
           },
@@ -180,13 +168,7 @@ exports[`The ElasticSearchMonitor stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":",
-                {
-                  "Fn::GetAtt": [
-                    "ElkAlertChannel1915A337",
-                    "TopicName",
-                  ],
-                },
+                ":devx-reliabilityandoperations",
               ],
             ],
           },
@@ -242,13 +224,7 @@ exports[`The ElasticSearchMonitor stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":",
-                {
-                  "Fn::GetAtt": [
-                    "ElkAlertChannel1915A337",
-                    "TopicName",
-                  ],
-                },
+                ":devx-reliabilityandoperations",
               ],
             ],
           },
@@ -290,41 +266,6 @@ exports[`The ElasticSearchMonitor stack matches the snapshot 1`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "ElkAlertChannel1915A337": {
-      "Properties": {
-        "DisplayName": "ELK alert channel for TEST",
-        "Tags": [
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/elastic-search-monitor",
-          },
-          {
-            "Key": "Stack",
-            "Value": "deploy",
-          },
-          {
-            "Key": "Stage",
-            "Value": "TEST",
-          },
-        ],
-        "TopicName": "elk-alerts-TEST",
-      },
-      "Type": "AWS::SNS::Topic",
-    },
-    "ElkAlertChanneldevxsecopsguardiancouk276AF53D": {
-      "Properties": {
-        "Endpoint": "devx.sec.ops@guardian.co.uk",
-        "Protocol": "email",
-        "TopicArn": {
-          "Ref": "ElkAlertChannel1915A337",
-        },
-      },
-      "Type": "AWS::SNS::Subscription",
-    },
     "MasterNodeCountAlarmFE01B272": {
       "Properties": {
         "ActionsEnabled": true,
@@ -341,13 +282,7 @@ exports[`The ElasticSearchMonitor stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":",
-                {
-                  "Fn::GetAtt": [
-                    "ElkAlertChannel1915A337",
-                    "TopicName",
-                  ],
-                },
+                ":devx-reliabilityandoperations",
               ],
             ],
           },
@@ -403,13 +338,7 @@ exports[`The ElasticSearchMonitor stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":",
-                {
-                  "Fn::GetAtt": [
-                    "ElkAlertChannel1915A337",
-                    "TopicName",
-                  ],
-                },
+                ":devx-reliabilityandoperations",
               ],
             ],
           },
@@ -536,7 +465,7 @@ exports[`The ElasticSearchMonitor stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":devx-alerts",
+                ":devx-reliabilityandoperations",
               ],
             ],
           },
