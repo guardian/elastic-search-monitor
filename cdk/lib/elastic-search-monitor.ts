@@ -10,8 +10,6 @@ import { SecurityGroup } from 'aws-cdk-lib/aws-ec2';
 import { Schedule } from 'aws-cdk-lib/aws-events';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
-import { Topic } from 'aws-cdk-lib/aws-sns';
-import { EmailSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
 
 const app = 'elastic-search-monitor';
 
@@ -62,7 +60,7 @@ export class ElasticSearchMonitor extends GuStack {
 			monitoringConfiguration: {
 				toleratedErrorPercentage: 99,
 				numberOfEvaluationPeriodsAboveThresholdBeforeAlarm: 30,
-				snsTopicName: 'devx-alerts',
+				snsTopicName: 'devx-reliabilityandoperations',
 			},
 			rules: [{ schedule: Schedule.rate(Duration.minutes(1)) }],
 			runtime: Runtime.JAVA_21,
@@ -81,15 +79,6 @@ export class ElasticSearchMonitor extends GuStack {
 		});
 		additionalPolicies.map((policy) => scheduledLambda.addToRolePolicy(policy));
 
-		const topicForElasticsearchAlerts = new Topic(this, 'ElkAlertChannel', {
-			displayName: `ELK alert channel for ${this.stage}`,
-			topicName: `elk-alerts-${this.stage}`,
-		});
-
-		topicForElasticsearchAlerts.addSubscription(
-			new EmailSubscription('devx.sec.ops@guardian.co.uk'),
-		);
-
 		const clusterName = 'elk';
 
 		const metric = (metricName: string) => {
@@ -104,7 +93,7 @@ export class ElasticSearchMonitor extends GuStack {
 
 		const commonAlarmProps = {
 			app,
-			snsTopicName: topicForElasticsearchAlerts.topicName,
+			snsTopicName: 'devx-reliabilityandoperations',
 			period: Duration.minutes(1),
 		};
 
