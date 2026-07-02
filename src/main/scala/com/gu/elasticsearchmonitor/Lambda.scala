@@ -5,7 +5,7 @@ import com.amazonaws.services.lambda.runtime.{Context, LambdaLogger}
 import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.OkHttpClient
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider
-import software.amazon.awssdk.http.apache.ApacheHttpClient
+import software.amazon.awssdk.http.apache5.Apache5HttpClient
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.cloudwatch.CloudWatchClient
 import software.amazon.awssdk.services.ec2.Ec2Client
@@ -55,13 +55,13 @@ object Lambda {
   val cloudwatch: CloudWatchClient = CloudWatchClient.builder()
     .credentialsProvider(credentials)
     .region(Region.EU_WEST_1)
-    .httpClientBuilder(ApacheHttpClient.builder())
+    .httpClientBuilder(Apache5HttpClient.builder())
     .build
 
   val ec2: Ec2Client = Ec2Client.builder()
     .credentialsProvider(credentials)
     .region(Region.EU_WEST_1)
-    .httpClientBuilder(ApacheHttpClient.builder())
+    .httpClientBuilder(Apache5HttpClient.builder())
     .build
 
   val cloudwatchMetrics = CloudwatchMetrics(Env(), cloudwatch)
