@@ -149,6 +149,7 @@ export class ElasticSearchMonitor extends GuStack {
 			evaluationPeriods: 2,
 			metric: metric('MaxJvmHeapUsage'),
 			threshold: 85,
+			okAction: true,
 		});
 
 		const lowStorageDescription = `A data node is running out of disk space.
