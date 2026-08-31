@@ -1,3 +1,3 @@
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.4.1")
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.4.2")
 
 addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.8.3")
