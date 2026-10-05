@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v7
 
-    - uses: guardian/setup-scala@v1
+    - uses: guardian/setup-scala@v2
 
     - uses: actions/setup-node@v6
       with:
